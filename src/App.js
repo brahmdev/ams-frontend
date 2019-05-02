@@ -1,24 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
+import {Provider} from 'react-redux';
+import {store} from './store/configureStore';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import AdminRoute from './containers/AdminRoute';
+import AuthenticatedRoute from './containers/AuthenticatedRoute';
+import Dashboard from './components/Dashboard';
 import './App.css';
+import SignIn from "./containers/signin/SignIn";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Provider store={store}>
+            <Router>
+                <div>
+                    <div className='app-main'>
+                        {/* ToDo add ErrorBoundary (c) https://reactjs.org/docs/code-splitting.html#error-boundaries */}
+                        <Switch>
+                            <AuthenticatedRoute exact path='/' component={Dashboard}/>
+                            <Route exact path='/login' component={SignIn}/>
+                        </Switch>
+                    </div>
+                </div>
+            </Router>
+        </Provider>
     </div>
   );
 }
