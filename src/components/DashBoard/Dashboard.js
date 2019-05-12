@@ -14,11 +14,14 @@ import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+import { secondaryListItems } from './listItems';
 import SimpleLineChart from './SimpleLineChart';
 import SimpleTable from './SimpleTable';
 import PrimaryMenuList from "./PrimaryMenuList";
 import MediaCard from "./MediaCard";
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import IncomeExpenseSection from "./IncomeExpenseSection";
 
 const drawerWidth = 280;
 
@@ -93,10 +96,18 @@ const styles = theme => ({
   },
   tableContainer: {
     height: 320,
+    marginLeft: '25px',
+    marginRight: '15px'
   },
   h5: {
     marginBottom: theme.spacing.unit * 2,
   },
+  logo: {
+    width: '100%',
+    fontSize: '18px',
+    color: 'slategray'
+  },
+
 });
 
 class Dashboard extends React.Component {
@@ -158,6 +169,7 @@ class Dashboard extends React.Component {
           open={this.state.open}
         >
           <div className={classes.toolbarIcon}>
+            <div className={classes.logo}>YOUR LOGO GOES HERE</div>
             <IconButton onClick={this.handleDrawerClose}>
               <ChevronLeftIcon />
             </IconButton>
@@ -172,15 +184,11 @@ class Dashboard extends React.Component {
           <Typography component="div" className={classes.chartContainer}>
             <MediaCard/>
           </Typography>
-          <Typography variant="h4" gutterBottom component="h2">
-            Orders
-          </Typography>
+
           <Typography component="div" className={classes.chartContainer}>
-            <SimpleLineChart />
+            <IncomeExpenseSection/>
           </Typography>
-          <Typography variant="h4" gutterBottom component="h2">
-            Products
-          </Typography>
+
           <div className={classes.tableContainer}>
             <SimpleTable />
           </div>

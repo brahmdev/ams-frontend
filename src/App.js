@@ -4,7 +4,7 @@ import {store} from './store/configureStore';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import AdminRoute from './containers/AdminRoute';
 import AuthenticatedRoute from './containers/AuthenticatedRoute';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/DashBoard/Dashboard';
 import './App.css';
 import SignIn from "./containers/signin/SignIn";
 

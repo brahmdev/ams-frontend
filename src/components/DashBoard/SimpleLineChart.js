@@ -9,13 +9,19 @@ import Tooltip from 'recharts/lib/component/Tooltip';
 import Legend from 'recharts/lib/component/Legend';
 
 const data = [
-  { name: 'Mon', Visits: 2200, Orders: 3400 },
-  { name: 'Tue', Visits: 1280, Orders: 2398 },
-  { name: 'Wed', Visits: 5000, Orders: 4300 },
-  { name: 'Thu', Visits: 4780, Orders: 2908 },
-  { name: 'Fri', Visits: 5890, Orders: 4800 },
-  { name: 'Sat', Visits: 4390, Orders: 3800 },
-  { name: 'Sun', Visits: 4490, Orders: 4300 },
+  { name: 'Jan', Expense: 2200, Income: 3400 },
+  { name: 'Feb', Expense: 1280, Income: 2398 },
+  { name: 'Mar', Expense: 5000, Income: 4300 },
+  { name: 'Apr', Expense: 4780, Income: 2908 },
+  { name: 'May', Expense: 5890, Income: 4800 },
+  { name: 'Jun', Expense: 4390, Income: 3800 },
+  { name: 'Jul', Expense: 4490, Income: 4300 },
+  { name: 'Aug', Expense: 4490, Income: 4300 },
+  { name: 'Sep', Expense: 4490, Income: 4300 },
+  { name: 'Aug', Expense: 6000, Income: 4300 },
+  { name: 'Oct', Expense: 4000, Income: 8000 },
+  { name: 'Nov', Expense: 4490, Income: 4300 },
+  { name: 'Dev', Expense: 4490, Income: 4300 },
 ];
 
 function SimpleLineChart() {
@@ -28,8 +34,8 @@ function SimpleLineChart() {
         <CartesianGrid vertical={false} strokeDasharray="3 3" />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="Visits" stroke="#82ca9d" />
-        <Line type="monotone" dataKey="Orders" stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="Expense" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="Income" stroke="#8884d8" activeDot={{ r: 8 }} />
       </LineChart>
     </ResponsiveContainer>
   );
