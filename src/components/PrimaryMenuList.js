@@ -47,7 +47,7 @@ class PrimaryMenuList extends React.Component {
         return (
             <List
                 component="nav"
-                subheader={<ListSubheader component="div">Primary Menus</ListSubheader>}
+                subheader={<ListSubheader inset>Primary Menus</ListSubheader>}
                 className={classes.root}
             >
                 <ListItem button>

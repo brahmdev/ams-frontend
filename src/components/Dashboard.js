@@ -18,6 +18,7 @@ import { mainListItems, secondaryListItems } from './listItems';
 import SimpleLineChart from './SimpleLineChart';
 import SimpleTable from './SimpleTable';
 import PrimaryMenuList from "./PrimaryMenuList";
+import MediaCard from "./MediaCard";
 
 const drawerWidth = 280;
 
@@ -168,6 +169,9 @@ class Dashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
+          <Typography component="div" className={classes.chartContainer}>
+            <MediaCard/>
+          </Typography>
           <Typography variant="h4" gutterBottom component="h2">
             Orders
           </Typography>
