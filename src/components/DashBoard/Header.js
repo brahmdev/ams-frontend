@@ -152,7 +152,7 @@ class Header extends React.Component {
               noWrap
               className={classes.title}
             >
-              Dashboard
+              Academy Management System
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
