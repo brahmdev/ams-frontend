@@ -7,23 +7,29 @@ import AuthenticatedRoute from './containers/AuthenticatedRoute';
 import Dashboard from './components/DashBoard/Dashboard';
 import './App.css';
 import SignIn from "./containers/signin/SignIn";
+import Board from "./containers/Board";
+import Header from "./components/DashBoard/Header";
 
 function App() {
   return (
     <div className="App">
-        <Provider store={store}>
-            <Router>
-                <div>
-                    <div className='app-main'>
-                        {/* ToDo add ErrorBoundary (c) https://reactjs.org/docs/code-splitting.html#error-boundaries */}
-                        <Switch>
-                            <AuthenticatedRoute exact path='/' component={Dashboard}/>
-                            <Route exact path='/login' component={SignIn}/>
-                        </Switch>
-                    </div>
-                </div>
-            </Router>
-        </Provider>
+      <Provider store={store}>
+        <Router>
+          <div>
+            <div className='app-main'>
+              <Header/>
+              {/* ToDo add ErrorBoundary (c) https://reactjs.org/docs/code-splitting.html#error-boundaries */}
+              <div className='content'>
+                <Switch>
+                  <AuthenticatedRoute exact path='/' component={Dashboard}/>
+                  <Route exact path='/login' component={SignIn}/>
+                  <Route exact path='/board' component={Board}/>
+                </Switch>
+              </div>
+            </div>
+          </div>
+        </Router>
+      </Provider>
     </div>
   );
 }

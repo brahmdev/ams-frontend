@@ -20,6 +20,9 @@ import Timeline from '@material-ui/icons/Timeline';
 import AccountBalance from '@material-ui/icons/AccountBalance';
 import Payment from '@material-ui/icons/Payment';
 import Gavel from '@material-ui/icons/Gavel';
+import {Link} from 'react-router-dom';
+import Board from "../../containers/Board";
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -71,6 +74,28 @@ class PrimaryMenuList extends React.Component {
     this.setState(state => ({examination: !state.examination}));
   };
 
+  renderIcon = (iconName) => {
+    if (iconName === 'dashBoard') {
+      return <DashboardIcon/>
+    } else if (iconName === 'board') {
+      return <ViewHeadline/>
+    }
+  }
+
+  renderListItem = (route, classes, iconName, title, isNested) => {
+    const nestedClassName = isNested ? classes.nested : '';
+    return (
+      <Link to={route} style={{textDecoration: 'none'}}>
+        <ListItem button className={nestedClassName}>
+          <ListItemIcon>
+            {this.renderIcon(iconName)}
+            </ListItemIcon>
+          <ListItemText inset primary={title}/>
+        </ListItem>
+      </Link>
+    );
+  };
+
   render() {
     const {classes} = this.props;
 
@@ -80,12 +105,7 @@ class PrimaryMenuList extends React.Component {
         subheader={<ListSubheader inset>Primary Menus</ListSubheader>}
         className={classes.root}
       >
-        <ListItem button>
-          <ListItemIcon>
-            <DashboardIcon/>
-          </ListItemIcon>
-          <ListItemText inset primary="Dashboard"/>
-        </ListItem>
+        {this.renderListItem('/', classes, 'dashBoard', 'Dashboard', false)}
 
         <ListItem button onClick={this.handleAcademicClick}>
           <ListItemIcon>
@@ -96,12 +116,7 @@ class PrimaryMenuList extends React.Component {
         </ListItem>
         <Collapse in={this.state.academic} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <ViewHeadline/>
-              </ListItemIcon>
-              <ListItemText inset primary="Board"/>
-            </ListItem>
+            {this.renderListItem('/board', classes, 'board', 'Board', true)}
           </List>
         </Collapse>
         <Collapse in={this.state.academic} timeout="auto" unmountOnExit>
