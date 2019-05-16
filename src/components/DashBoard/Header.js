@@ -22,6 +22,7 @@ import MediaCard from "./MediaCard";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import IncomeExpenseSection from "./IncomeExpenseSection";
+import {connect} from 'react-redux';
 
 const drawerWidth = 280;
 
@@ -124,63 +125,66 @@ class Header extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
-
-    return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="absolute"
-          className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
-        >
-          <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(
-                classes.menuButton,
-                this.state.open && classes.menuButtonHidden,
-              )}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
-            >
-              Academy Management System
-            </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
-          }}
-          open={this.state.open}
-        >
-          <div className={classes.toolbarIcon}>
-            <div className={classes.logo}>YOUR LOGO GOES HERE</div>
-            <IconButton onClick={this.handleDrawerClose}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <PrimaryMenuList/>
-          <Divider />
-          <List>{secondaryListItems}</List>
-        </Drawer>
-      </div>
-    );
+    const { classes, isLoggedIn } = this.props;
+    if (isLoggedIn) {
+      return (
+        <div className={classes.root}>
+          <CssBaseline/>
+          <AppBar
+            position="absolute"
+            className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+          >
+            <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerOpen}
+                className={classNames(
+                  classes.menuButton,
+                  this.state.open && classes.menuButtonHidden,
+                )}
+              >
+                <MenuIcon/>
+              </IconButton>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                className={classes.title}
+              >
+                Academy Management System
+              </Typography>
+              <IconButton color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <NotificationsIcon/>
+                </Badge>
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            classes={{
+              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+            }}
+            open={this.state.open}
+          >
+            <div className={classes.toolbarIcon}>
+              <div className={classes.logo}>YOUR LOGO GOES HERE</div>
+              <IconButton onClick={this.handleDrawerClose}>
+                <ChevronLeftIcon/>
+              </IconButton>
+            </div>
+            <Divider/>
+            <PrimaryMenuList/>
+            <Divider/>
+            <List>{secondaryListItems}</List>
+          </Drawer>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
@@ -188,4 +192,10 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Header);
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.user.isLoggedIn
+  };
+}
+
+export default connect(mapStateToProps)(withStyles(styles)(Header));
