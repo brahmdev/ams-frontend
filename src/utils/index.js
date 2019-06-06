@@ -4,3 +4,9 @@ export function uuidv4() {
     return v.toString(16);
   });
 }
+
+export function actionWith(action, data) {
+  const finalAction = Object.assign({}, action, data);
+  delete finalAction.callAPI;
+  return finalAction;
+}

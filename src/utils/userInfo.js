@@ -1,6 +1,6 @@
 
 export function setUser(userName, password) {
-  window.localStorage.setItem('testEngineUser', userName + ':' + password);
+  window.localStorage.setItem('amsUser', userName + ':' + password);
   window.localStorage.setItem('userName', userName);
 }
 
@@ -13,7 +13,7 @@ export function getAdmin() {
 }
 
 export function clearUserInfo() {
-  window.localStorage.removeItem('testEngineUser');
+  window.localStorage.removeItem('amsUser');
   window.localStorage.removeItem('userName');
   window.localStorage.removeItem('admin');
 }
@@ -22,18 +22,18 @@ export function getUserName() {
   return window.localStorage.getItem('userName');
 }
 
-export function getTestServerUser() {
-  return window.localStorage.getItem('testEngineUser');
+export function getAMSUser() {
+  return window.localStorage.getItem('amsUser');
 }
 
 export function setLoggeddIn() {
-  window.localStorage.setItem('loggedInToTestEngine', true);
+  window.localStorage.setItem('loggedInToAMS', true);
 }
 
 export function isUserLoggedIn() {
-  return !!JSON.parse(window.localStorage.getItem('loggedInToTestEngine'));
+  return !!JSON.parse(window.localStorage.getItem('loggedInToAMS'));
 }
 
 export function setLoggedOut() {
-  window.localStorage.removeItem('loggedInToTestEngine');
+  window.localStorage.removeItem('loggedInToAMS');
 }

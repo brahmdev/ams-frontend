@@ -22,10 +22,11 @@ class Board extends Component {
     this.state = {
       columns: [
         {title: 'Borad Id', field: 'id', editable: 'never'},
+        {title: 'Board Code', field: 'code'},
         {title: 'Board Name', field: 'name'},
       ],
       data: [
-        {id: uuidv4(), name: 'SSC'},
+        {id: uuidv4(), code: 'SSC', name: 'Secondary School Certificate'},
       ]
     }
   }
