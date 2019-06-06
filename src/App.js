@@ -23,7 +23,7 @@ function App() {
                 <Switch>
                   <AuthenticatedRoute exact path='/' component={Dashboard}/>
                   <Route exact path='/login' component={SignIn}/>
-                  <Route exact path='/board' component={Board}/>
+                  <AuthenticatedRoute exact path='/board' component={Board}/>
                 </Switch>
               </div>
             </div>

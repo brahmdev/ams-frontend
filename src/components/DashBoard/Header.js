@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -14,15 +14,16 @@ import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { secondaryListItems } from './listItems';
-import SimpleLineChart from './SimpleLineChart';
-import SimpleTable from './SimpleTable';
+import {secondaryListItems} from './listItems';
 import PrimaryMenuList from "./PrimaryMenuList";
-import MediaCard from "./MediaCard";
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import IncomeExpenseSection from "./IncomeExpenseSection";
 import {connect} from 'react-redux';
+import {isUserLoggedIn, setLoggedOut} from "../../utils/userInfo";
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import PowerSettingsNewOutlined from '@material-ui/icons/PowerSettingsNewOutlined';
+import PermIdentityOutlined from '@material-ui/icons/PermIdentityOutlined';
 
 const drawerWidth = 280;
 
@@ -55,10 +56,7 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36,
-  },
+
   menuButtonHidden: {
     display: 'none',
   },
@@ -108,24 +106,48 @@ const styles = theme => ({
     fontSize: '18px',
     color: 'slategray'
   },
-
+  menuButton: {
+    marginRight: theme.spacing.unit * 2,
+  },
 });
 
 class Header extends React.Component {
-  state = {
-    open: true,
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      open: true,
+      accountMenuOpen: false,
+      anchorEl: null
+    };
+  }
+
 
   handleDrawerOpen = () => {
-    this.setState({ open: true });
+    this.setState({open: true});
   };
 
   handleDrawerClose = () => {
-    this.setState({ open: false });
+    this.setState({open: false});
+  };
+
+  handleMenu = (event) => {
+    this.setState({accountMenuOpen: true, anchorEl: event.currentTarget});
+  };
+
+  handleClose = () => {
+    this.setState({accountMenuOpen: false, anchorEl: null});
+  };
+
+  handleLogout = () => {
+    this.setState({accountMenuOpen: false, anchorEl: null});
+    setLoggedOut();
+    window.location.reload()
   };
 
   render() {
-    const { classes, isLoggedIn } = this.props;
+    const {classes, isLoggedIn} = this.props;
     if (isLoggedIn) {
       return (
         <div className={classes.root}>
@@ -155,11 +177,58 @@ class Header extends React.Component {
               >
                 Academy Management System
               </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon/>
-                </Badge>
-              </IconButton>
+
+
+              {isUserLoggedIn() && (
+                <div>
+                  <IconButton color="inherit">
+                    <Badge badgeContent={4} color="secondary">
+                      <NotificationsIcon/>
+                    </Badge>
+                  </IconButton>
+                  <IconButton
+                    aria-label="Account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={this.handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle/>
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={this.state.anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    style={{
+                      position: 'absolute'
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={this.state.accountMenuOpen}
+                    onClose={this.handleClose}
+                  >
+                    <MenuItem onClick={this.handleClose}>
+                      <ListItemIcon>
+                        <PermIdentityOutlined/>
+                      </ListItemIcon>
+                      Profile
+                    </MenuItem>
+
+                    <MenuItem onClick={this.handleLogout}>
+                      <ListItemIcon>
+                        <PowerSettingsNewOutlined/>
+                      </ListItemIcon>
+                      Logout
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
             </Toolbar>
           </AppBar>
           <Drawer

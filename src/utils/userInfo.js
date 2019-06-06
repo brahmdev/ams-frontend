@@ -8,6 +8,14 @@ export function setAdmin(admin) {
   window.localStorage.setItem('admin', admin);
 }
 
+export function setInstituteId(instituteId) {
+  window.localStorage.setItem('instituteId', instituteId);
+}
+
+export function getInstituteId() {
+  return window.localStorage.getItem('instituteId');
+}
+
 export function getAdmin() {
   return !!JSON.parse(window.localStorage.getItem('admin'));
 }

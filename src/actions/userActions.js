@@ -1,4 +1,3 @@
-// @flow
 import { userActionTypes, CALL_API } from './actionTypes';
 
 export function login(username) {

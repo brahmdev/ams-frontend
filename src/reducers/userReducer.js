@@ -3,8 +3,7 @@ import {
   setLoggeddIn,
   getAdmin,
   setAdmin,
-  clearUserInfo,
-  setLoggedOut
+  setInstituteId,
 } from '../utils/userInfo';
 import {userActionTypes, apiExecutionState} from '../actions/actionTypes';
 
@@ -23,6 +22,8 @@ export default function (state = initialState, action) {
     case userActionTypes.API_USER_LOGIN + apiExecutionState.FINISHED:
       console.log('done ', action);
       const user = JSON.parse(action.response);
+      const instituteId = user.institute.id;
+      setInstituteId(instituteId);
       const authorities = user.authoritieses;
       let isAdmin = false;
       for (const authObj of authorities) {
