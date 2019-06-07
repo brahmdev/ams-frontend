@@ -9,6 +9,7 @@ import SignIn from "./containers/signin/SignIn";
 import Board from "./containers/Board";
 import Header from "./components/DashBoard/Header";
 import Standard from "./containers/Standard";
+import Subject from "./containers/Subject";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
                   <Route exact path='/login' component={SignIn}/>
                   <AuthenticatedRoute exact path='/board' component={Board}/>
                   <AuthenticatedRoute exact path='/standard' component={Standard}/>
+                  <AuthenticatedRoute exact path='/subject' component={Subject}/>
                 </Switch>
               </div>
             </div>

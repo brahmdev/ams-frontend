@@ -1,10 +1,11 @@
-import { standardActionTypes, apiExecutionState} from '../actions/actionTypes';
+import {standardActionTypes, apiExecutionState} from '../actions/actionTypes';
 
 const initialState = {
   id: '',
   code: '',
   name: '',
   fees: '',
+  standardLookUp: {},
   standardList: []
 };
 
@@ -15,6 +16,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         standardList
+      };
+    case standardActionTypes.API_GET_ALL_STANDARDS_LOOKUP + apiExecutionState.FINISHED:
+      const standardLookUp = JSON.parse(action.response);
+      return {
+        ...state,
+        standardLookUp
       };
     case standardActionTypes.API_CREATE_STANDARD + apiExecutionState.FINISHED:
       const createdBoard = JSON.parse(action.response);

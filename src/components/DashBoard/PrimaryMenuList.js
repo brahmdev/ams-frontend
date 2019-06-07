@@ -74,7 +74,7 @@ class PrimaryMenuList extends React.Component {
   renderIcon = (iconName) => {
     if (iconName === 'dashBoard') {
       return <DashboardIcon/>
-    } else if (['board', 'standard'].includes(iconName)) {
+    } else if (['board', 'standard', 'subject'].includes(iconName)) {
       return <ViewHeadline/>
     }
   };
@@ -123,12 +123,7 @@ class PrimaryMenuList extends React.Component {
         </Collapse>
         <Collapse in={this.state.academic} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <ViewHeadline/>
-              </ListItemIcon>
-              <ListItemText inset primary="Batch"/>
-            </ListItem>
+            {this.renderListItem('/subject', classes, 'subject', 'Subject', true)}
           </List>
         </Collapse>
         <Collapse in={this.state.academic} timeout="auto" unmountOnExit>
