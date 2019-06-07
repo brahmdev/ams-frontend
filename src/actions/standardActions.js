@@ -45,12 +45,12 @@ export function updateStandard(standard) {
   };
 }
 
-export function deleteStandard(instituteId, standardId) {
+export function deleteStandard(standardId) {
   return {
     type: standardActionTypes.API_DELETE_STANDARD,
     apiType: CALL_API,
     callAPI: {
-      apiPathWithParam: `/admin/standards/${instituteId}/${standardId}`,
+      apiPathWithParam: `/admin/standards/${standardId}`,
       options: {
         method: 'DELETE',
         contentType: 'application/json'

@@ -147,7 +147,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const {classes, isLoggedIn} = this.props;
+    const {classes, isLoggedIn, institute} = this.props;
     if (isLoggedIn) {
       return (
         <div className={classes.root}>
@@ -175,7 +175,7 @@ class Header extends React.Component {
                 noWrap
                 className={classes.title}
               >
-                Academy Management System
+                {institute !== '' ? institute.name : 'Academy Management System'}
               </Typography>
 
 
@@ -263,7 +263,8 @@ Header.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    isLoggedIn: state.user.isLoggedIn
+    isLoggedIn: state.user.isLoggedIn,
+    institute: state.user.institute
   };
 }
 

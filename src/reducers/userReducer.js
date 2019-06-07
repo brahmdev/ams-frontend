@@ -14,14 +14,15 @@ const initialState = {
   isLoggedIn: isUserLoggedIn(),
   loginError: false,
   loginErrorMessage: '',
-  isSocketConnected: false
+  isSocketConnected: false,
+  institute: ''
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case userActionTypes.API_USER_LOGIN + apiExecutionState.FINISHED:
-      console.log('done ', action);
       const user = JSON.parse(action.response);
+      console.log('user: ', user)
       const instituteId = user.institute.id;
       setInstituteId(instituteId);
       const authorities = user.authoritieses;
@@ -39,7 +40,8 @@ export default function (state = initialState, action) {
         admin: isAdmin,
         isLoading: false,
         isLoggedIn: true,
-        loginError: false
+        loginError: false,
+        institute: user.institute
       };
     default:
       return state;

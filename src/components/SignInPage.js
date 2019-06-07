@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +11,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {withTheme} from '@material-ui/core/styles';
 
 const styles = theme => ({
     main: {
@@ -48,20 +46,20 @@ const styles = theme => ({
 
 class SignInPage extends Component {
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         this.props.handleSubmit(event);
-    }
+    };
 
-    onUserNameChange(event) {
+    onUserNameChange = (event) => {
         this.props.onUserNameChange(event.target.value);
-    }
+    };
 
-    onPasswordChange(event) {
+    onPasswordChange = (event) => {
         this.props.onPasswordChange(event.target.value);
-    }
+    };
 
     render() {
-        const { classes, onUserNameChange, onPasswordChange, handleSubmit } = this.props;
+        const { classes } = this.props;
         return (
             <main className={classes.main}>
                 <CssBaseline/>

@@ -83,9 +83,7 @@ class Board extends Component {
             onRowDelete: oldData =>
               new Promise((resolve, reject) => {
                 setTimeout(() => {
-                  {
-                    this.props.deleteBoard(oldData.id)
-                  }
+                    this.props.deleteBoard(oldData.id);
                   resolve()
                 }, 1000)
               }),

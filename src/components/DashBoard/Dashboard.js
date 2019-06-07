@@ -6,8 +6,6 @@ import SimpleTable from './SimpleTable';
 import MediaCard from "./MediaCard";
 import IncomeExpenseSection from "./IncomeExpenseSection";
 
-const drawerWidth = 280;
-
 const styles = theme => ({
   root: {
     display: 'flex',

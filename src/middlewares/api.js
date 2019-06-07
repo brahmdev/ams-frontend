@@ -1,4 +1,4 @@
-import {pesronalAccountActionTypes, CALL_API} from '../actions/actionTypes';
+import { CALL_API } from '../actions/actionTypes';
 import { getAMSUser} from '../utils/userInfo';
 import { actionWith } from '../utils/index';
 import { apiExecutionState } from "../actions/actionTypes";

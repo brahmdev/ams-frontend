@@ -24,11 +24,12 @@ class Standard extends Component {
     super(props);
     this.state = {
       columns: [
-        {title: 'Standard Code', field: 'code'},
-        {title: 'Standard Name', field: 'name'},
-        {title: 'Fees', field: 'fees'},
+        {title: 'Standard Code', field: 'code', filtering: false},
+        {title: 'Standard Name', field: 'name', filtering: false},
+        {title: 'Fees', field: 'fees', type: 'numeric', filtering: false},
         {title: 'Board Code', field: 'board.id', lookup: this.props.board.boardLookup},
-        {title: 'Language', field: 'language.code'},
+        {title: 'Language', field: 'language.id', lookup: { 1: 'Hindi', 2: 'English', 3: 'Marathi' },
+        },
 
       ]
     }
@@ -46,14 +47,12 @@ class Standard extends Component {
       columns[3].lookup = nextProps.board.boardLookup;
       return ({ columns }) // <- this is setState equivalent
     }
+    return null;
   }
 
   render() {
     const {classes, standard} = this.props;
-    const instituteId = getInstituteId();
-    console.log('lookup ', this.props.board);
 
-    console.log('column ', this.state.columns[3])
     return (
       <div className={classes.content}>
         <MaterialTable
@@ -67,18 +66,31 @@ class Standard extends Component {
               backgroundColor: '#45CB85',
               color: '#FFF',
               fontSize: 16
-            }
+            },
+            filtering: true
           }}
           editable={{
             onRowAdd: newData =>
               new Promise((resolve, reject) => {
                 setTimeout(() => {
                   {
-                    const institute = {
-                      "id" : instituteId
+                    console.log('BEFORE ', newData['board.id'])
+
+                    const board = {
+                      "id" : newData['board.id']
                     };
-                    newData.institute = institute;
-                    this.props.createBoard(newData);
+
+                    const language = {
+                      "id" : newData['language.id']
+                    };
+
+                    newData.board = board;
+                    newData.language = language;
+
+                    delete newData['board.id'];
+                    delete newData['language.id'];
+                    console.log(newData)
+                    this.props.createStandard(newData);
                   }
                   resolve()
                 }, 2000)
@@ -87,11 +99,21 @@ class Standard extends Component {
               new Promise((resolve, reject) => {
                 setTimeout(() => {
                   {
-                    const institute = {
-                      "id" : instituteId
+                    const board = {
+                      "id" : newData['board.id'] ? newData['board.id'] : oldData.board.id
                     };
-                    newData.institute = institute;
-                    this.props.upadateBoard(newData)
+
+                    const language = {
+                      "id" : newData['language.id'] ? newData['language.id'] : oldData.language.id
+                    };
+
+                    newData.board = board;
+                    newData.language = language;
+
+                    delete newData['board.id'];
+                    delete newData['language.id'];
+
+                    this.props.updateStandard(newData)
                   }
                   resolve()
                 }, 1000)
@@ -99,9 +121,7 @@ class Standard extends Component {
             onRowDelete: oldData =>
               new Promise((resolve, reject) => {
                 setTimeout(() => {
-                  {
-                    this.props.deleteBoard(instituteId, oldData.id)
-                  }
+                    this.props.deleteStandard(oldData.id);
                   resolve()
                 }, 1000)
               }),

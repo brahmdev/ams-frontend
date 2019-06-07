@@ -7,7 +7,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import School from '@material-ui/icons/School';
 import PeopleIcon from '@material-ui/icons/People';
 import AssignmentIcon from '@material-ui/icons/Assignment';
@@ -21,8 +20,6 @@ import AccountBalance from '@material-ui/icons/AccountBalance';
 import Payment from '@material-ui/icons/Payment';
 import Gavel from '@material-ui/icons/Gavel';
 import {Link} from 'react-router-dom';
-import Board from "../../containers/Board";
-import Standard from "../../containers/Standard";
 
 const styles = theme => ({
   root: {
