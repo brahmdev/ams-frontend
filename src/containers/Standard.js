@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import MaterialTable from 'material-table';
 import {withStyles} from "@material-ui/core";
-import { getAllBoards, createBoard, deleteBoard, updateBoard } from "../actions/boardActions";
+import { getAllStandards, createStandard, deleteStandard, updateStandard } from "../actions/standardActions";
+import { getAllBoardsLookUp } from "../actions/boardActions";
 import connect from "react-redux/es/connect/connect";
 import { getInstituteId } from "../utils/userInfo";
 
@@ -17,33 +18,48 @@ const styles = theme => ({
 });
 
 
-class Board extends Component {
+class Standard extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       columns: [
-        {title: 'Board Code', field: 'code'},
-        {title: 'Board Name', field: 'name'},
+        {title: 'Standard Code', field: 'code'},
+        {title: 'Standard Name', field: 'name'},
+        {title: 'Fees', field: 'fees'},
+        {title: 'Board Code', field: 'board.id', lookup: this.props.board.boardLookup},
+        {title: 'Language', field: 'language.code'},
+
       ]
     }
   }
 
   componentDidMount() {
     const instituteId = getInstituteId();
-    this.props.getAllBoards(instituteId);
+    this.props.getAllBoardsLookUp(instituteId);
+    this.props.getAllStandards(instituteId);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (Object.keys(nextProps.board.boardLookup).length > 1) {
+      const columns = prevState.columns;
+      columns[3].lookup = nextProps.board.boardLookup;
+      return ({ columns }) // <- this is setState equivalent
+    }
   }
 
   render() {
-    const {classes, board} = this.props;
+    const {classes, standard} = this.props;
     const instituteId = getInstituteId();
+    console.log('lookup ', this.props.board);
 
+    console.log('column ', this.state.columns[3])
     return (
       <div className={classes.content}>
         <MaterialTable
-          title="Board"
+          title="Standard"
           columns={this.state.columns}
-          data={board.boardList}
+          data={standard.standardList}
           options={{
             exportButton: true,
             actionsColumnIndex: -1,
@@ -84,7 +100,7 @@ class Board extends Component {
               new Promise((resolve, reject) => {
                 setTimeout(() => {
                   {
-                    this.props.deleteBoard(oldData.id)
+                    this.props.deleteBoard(instituteId, oldData.id)
                   }
                   resolve()
                 }, 1000)
@@ -97,16 +113,16 @@ class Board extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    board: state.board
-  };
+  const { board, standard } = state;
+  return { standard, board };
 }
 
 const mapDispatchToProps = {
-  getAllBoards,
-  createBoard,
-  deleteBoard,
-  upadateBoard: updateBoard
+  getAllBoardsLookUp,
+  getAllStandards,
+  createStandard,
+  deleteStandard,
+  updateStandard
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Board));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Standard));

@@ -22,7 +22,7 @@ import Payment from '@material-ui/icons/Payment';
 import Gavel from '@material-ui/icons/Gavel';
 import {Link} from 'react-router-dom';
 import Board from "../../containers/Board";
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import Standard from "../../containers/Standard";
 
 const styles = theme => ({
   root: {
@@ -77,10 +77,10 @@ class PrimaryMenuList extends React.Component {
   renderIcon = (iconName) => {
     if (iconName === 'dashBoard') {
       return <DashboardIcon/>
-    } else if (iconName === 'board') {
+    } else if (['board', 'standard'].includes(iconName)) {
       return <ViewHeadline/>
     }
-  }
+  };
 
   renderListItem = (route, classes, iconName, title, isNested) => {
     const nestedClassName = isNested ? classes.nested : '';
@@ -121,12 +121,7 @@ class PrimaryMenuList extends React.Component {
         </Collapse>
         <Collapse in={this.state.academic} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <ViewHeadline/>
-              </ListItemIcon>
-              <ListItemText inset primary="Standard"/>
-            </ListItem>
+              {this.renderListItem('/standard', classes, 'standard', 'Standard', true)}
           </List>
         </Collapse>
         <Collapse in={this.state.academic} timeout="auto" unmountOnExit>

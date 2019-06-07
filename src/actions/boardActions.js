@@ -13,6 +13,20 @@ export function getAllBoards(instituteId) {
   };
 }
 
+export function getAllBoardsLookUp(instituteId) {
+  return {
+    type: boardActionTypes.API_GET_ALL_BOARDS_LOOKUP,
+    apiType: CALL_API,
+    callAPI: {
+      apiPathWithParam: `/admin/boards/${instituteId}/lookup`,
+      options: {
+        method: 'GET'
+      }
+    },
+  };
+}
+
+
 export function createBoard(board) {
   return {
     type: boardActionTypes.API_CREATE_BOARD,
@@ -29,7 +43,7 @@ export function createBoard(board) {
   };
 }
 
-export function upadateBoard(board) {
+export function updateBoard(board) {
   return {
     type: boardActionTypes.API_UPDATE_BOARD,
     apiType: CALL_API,
@@ -45,12 +59,12 @@ export function upadateBoard(board) {
   };
 }
 
-export function deleteBoard(instituteId, boardId) {
+export function deleteBoard(boardId) {
   return {
     type: boardActionTypes.API_DELETE_BOARD,
     apiType: CALL_API,
     callAPI: {
-      apiPathWithParam: `/admin/boards/${instituteId}/${boardId}`,
+      apiPathWithParam: `/admin/boards/${boardId}`,
       options: {
         method: 'DELETE',
         contentType: 'application/json'

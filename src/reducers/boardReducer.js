@@ -4,7 +4,8 @@ const initialState = {
   id: '',
   code: '',
   name: '',
-  boardList: []
+  boardList: [],
+  boardLookup: {}
 };
 
 export default function (state = initialState, action) {
@@ -14,6 +15,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         boardList
+      };
+    case boardActionTypes.API_GET_ALL_BOARDS_LOOKUP + apiExecutionState.FINISHED:
+      const boardLookup = JSON.parse(action.response);
+      return {
+        ...state,
+        boardLookup
       };
     case boardActionTypes.API_CREATE_BOARD + apiExecutionState.FINISHED:
       const createdBoard = JSON.parse(action.response);

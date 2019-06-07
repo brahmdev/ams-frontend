@@ -9,6 +9,7 @@ import './App.css';
 import SignIn from "./containers/signin/SignIn";
 import Board from "./containers/Board";
 import Header from "./components/DashBoard/Header";
+import Standard from "./containers/Standard";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                   <AuthenticatedRoute exact path='/' component={Dashboard}/>
                   <Route exact path='/login' component={SignIn}/>
                   <AuthenticatedRoute exact path='/board' component={Board}/>
+                  <AuthenticatedRoute exact path='/standard' component={Standard}/>
                 </Switch>
               </div>
             </div>
