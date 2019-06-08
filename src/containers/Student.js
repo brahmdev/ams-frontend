@@ -19,6 +19,7 @@ const styles = theme => ({
   },
   button: {
     marginRight: 8,
+    marginTop: 20
   },
   instructions: {
     marginTop: 8,
@@ -32,10 +33,38 @@ class Student extends Component {
     super(props);
     this.state = {
       activeStep: 0,
-      skipped: new Set(),
-      steps: this.getSteps()
+      steps: this.getSteps(),
+
+      studentPersonalDetailsErrors: [],
     }
   }
+  isStudentPersonalDetailsFormInValid = false
+
+  studentPersonalDetailsRequiredFields = [
+    'firstName',
+    'lastName',
+    'userName',
+    'password',
+    'mobile',
+    'gender',
+    'email',
+    'address',
+    'city',
+    'state',
+    'zip',
+    'country'
+  ];
+
+  studentPersonalDetailsFieldsValue = [];
+
+  onChangeStudentPersoanlDetailsFormField = (data) => {
+    const {name, value} = data;
+    this.studentPersonalDetailsFieldsValue[name] = value;
+    if (value && value.length > 0 ) {
+      const studentPersonalDetailsErrors = this.state.studentPersonalDetailsErrors;
+      studentPersonalDetailsErrors[name] = false;
+      this.setState({ studentPersonalDetailsErrors, isStudentPersonalDetailsFormValid: false });    }
+  };
 
   getSteps = () => {
     return ['Personal Details', 'Parent Details', 'Academic Details'];
@@ -44,7 +73,7 @@ class Student extends Component {
   getStepContent = (step) => {
     switch (step) {
       case 0:
-        return <StudentPersonalDetailsForm/>;
+        return <StudentPersonalDetailsForm onChange={this.onChangeStudentPersoanlDetailsFormField} errors={this.state.studentPersonalDetailsErrors}/>;
       case 1:
         return <ParendDetailsForm/>;
       case 2:
@@ -54,27 +83,33 @@ class Student extends Component {
     }
   };
 
-  isStepOptional = (step) => {
-    return step === 1;
-  };
-
   isStepFailed = (step) => {
-    return step === 1;
-  };
-
-  isStepSkipped = (step) => {
-    return this.state.skipped.has(step);
+    if (step === 0 ) {
+      return this.isStudentPersonalDetailsFormInValid;
+    }
+    return false;
   };
 
   handleNext = () => {
-    let newSkipped = this.state.skipped;
-    if (this.isStepSkipped(this.state.activeStep)) {
-      newSkipped = new Set(this.state.skipped.values());
-      newSkipped.delete(this.state.activeStep);
+    const { studentPersonalDetailsErrors } = this.state;
+    this.studentPersonalDetailsRequiredFields.forEach(field => {
+      if (!this.studentPersonalDetailsFieldsValue[field]) {
+        studentPersonalDetailsErrors[field] = true;
+        this.setState({ studentPersonalDetailsErrors });
+      }
+    });
+
+    for (var errorKey in studentPersonalDetailsErrors) {
+      if (studentPersonalDetailsErrors.hasOwnProperty(errorKey)) {
+        if (studentPersonalDetailsErrors[errorKey] === true) {
+          this.isStudentPersonalDetailsFormInValid = true
+          return;
+        }
+      }
     }
+    this.isStudentPersonalDetailsFormInValid = false;
 
     this.setState({
-      skipped: newSkipped,
       activeStep: this.state.activeStep + 1
     })
   };
@@ -84,19 +119,6 @@ class Student extends Component {
       activeStep: this.state.activeStep - 1
     })
   };
-
-  handleSkip = () => {
-    if (!this.isStepOptional(this.state.activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-    const skipped = this.state.skipped;
-    const activeStep = this.state.activeStep;
-    skipped.add(this.state.activeStep)
-    ;
-    this.setState({skipped, activeStep: activeStep + 1 });
-   };
 
   handleReset = () => {
     this.setState({activeStep: 0});
@@ -111,19 +133,18 @@ class Student extends Component {
           {this.state.steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
-            if (this.isStepOptional(index)) {
+            /*if (this.isStepOptional(index)) {
               labelProps.optional = (
                 <Typography variant="caption" color="error">
                   Alert message
                 </Typography>
               );
-            }
+            }*/
+            console.log('label : ', label, ': ',  index)
             if (this.isStepFailed(index)) {
               labelProps.error = true;
             }
-            if (this.isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
+
             return (
               <Step key={label} {...stepProps}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
@@ -143,21 +164,11 @@ class Student extends Component {
             </div>
           ) : (
             <div>
-              <Typography className={classes.instructions}>{this.getStepContent(this.state.activeStep)}</Typography>
+              {this.getStepContent(this.state.activeStep)}
               <div>
                 <Button disabled={activeStep === 0} onClick={this.handleBack} className={classes.button}>
                   Back
                 </Button>
-                {this.isStepOptional(activeStep) && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={this.handleSkip}
-                    className={classes.button}
-                  >
-                    Skip
-                  </Button>
-                )}
 
                 <Button
                   variant="contained"
