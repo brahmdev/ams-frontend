@@ -11,6 +11,8 @@ import Header from "./components/DashBoard/Header";
 import Standard from "./containers/Standard";
 import Subject from "./containers/Subject";
 import Chapter from "./containers/Chapter";
+import Student from "./containers/Student";
+import Footer from "./components/DashBoard/Footer";
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
                   <AuthenticatedRoute exact path='/standard' component={Standard}/>
                   <AuthenticatedRoute exact path='/subject' component={Subject}/>
                   <AuthenticatedRoute exact path='/chapter' component={Chapter}/>
+                  <AuthenticatedRoute exact path='/student' component={Student}/>
                 </Switch>
               </div>
             </div>

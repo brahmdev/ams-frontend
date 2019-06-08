@@ -18,7 +18,7 @@ const styles = theme => ({
 });
 
 
-class Standard extends Component {
+class Subject extends Component {
 
   constructor(props) {
     super(props);
@@ -122,4 +122,4 @@ const mapDispatchToProps = {
   updateSubject
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Standard));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Subject));
