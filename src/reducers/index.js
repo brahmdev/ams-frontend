@@ -3,12 +3,14 @@ import UserLoginReducer from './userReducer';
 import BoardReducer from './boardReducer';
 import StandardReducer from './standardReducer';
 import SubjectReducer from './subjectReducer';
+import ChapterReducer from './chapterReducer'
 
 const appReducer = combineReducers({
   user: UserLoginReducer,
   board: BoardReducer,
   standard: StandardReducer,
-  subject: SubjectReducer
+  subject: SubjectReducer,
+  chapter: ChapterReducer
 });
 
 export const rootReducer = (state, action) => {

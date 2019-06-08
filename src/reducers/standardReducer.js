@@ -24,26 +24,26 @@ export default function (state = initialState, action) {
         standardLookUp
       };
     case standardActionTypes.API_CREATE_STANDARD + apiExecutionState.FINISHED:
-      const createdBoard = JSON.parse(action.response);
-      state.standardList.push(createdBoard);
+      const createdStandard = JSON.parse(action.response);
+      state.standardList.push(createdStandard);
       return {
         ...state,
       };
     case standardActionTypes.API_UPDATE_STANDARD + apiExecutionState.FINISHED:
-      const boardToUpdate = action.payload;
-      const boardIdToUpdate = action.payload.id;
+      const standardToUpdate = action.payload;
+      const standardIdToUpdate = action.payload.id;
       for (let index = 0; index < state.standardList.length; index++) {
-        if (boardIdToUpdate === state.standardList[index].id) {
-          state.standardList[index] = boardToUpdate;
+        if (standardIdToUpdate === state.standardList[index].id) {
+          state.standardList[index] = standardToUpdate;
         }
       }
       return {
         ...state,
       };
     case standardActionTypes.API_DELETE_STANDARD + apiExecutionState.FINISHED:
-      const boardIdToDelete = action.payload;
+      const standardIdToDelete = action.payload;
       for (let index = 0; index < state.standardList.length; index++) {
-        if (boardIdToDelete === state.standardList[index].id) {
+        if (standardIdToDelete === state.standardList[index].id) {
           state.standardList.splice(index, 1);
         }
       }

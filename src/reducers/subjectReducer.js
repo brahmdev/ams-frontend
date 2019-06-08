@@ -1,9 +1,10 @@
-import { subjectActionTypes, apiExecutionState} from '../actions/actionTypes';
+import {subjectActionTypes, apiExecutionState} from '../actions/actionTypes';
 
 const initialState = {
   id: '',
   code: '',
   name: '',
+  subjectLookUp: {},
   subjectList: []
 };
 
@@ -15,6 +16,12 @@ export default function (state = initialState, action) {
         ...state,
         subjectList
       };
+    case subjectActionTypes.API_GET_ALL_SUBJECTS_LOOKUP + apiExecutionState.FINISHED:
+      const subjectLookUp = JSON.parse(action.response);
+      return {
+        ...state,
+        subjectLookUp
+      };
     case subjectActionTypes.API_CREATE_SUBJECT + apiExecutionState.FINISHED:
       const createdBoard = JSON.parse(action.response);
       state.subjectList.push(createdBoard);
@@ -22,20 +29,20 @@ export default function (state = initialState, action) {
         ...state,
       };
     case subjectActionTypes.API_UPDATE_SUBJECT + apiExecutionState.FINISHED:
-      const boardToUpdate = action.payload;
-      const boardIdToUpdate = action.payload.id;
+      const subjectToUpdate = action.payload;
+      const subjectIdToUpdate = action.payload.id;
       for (let index = 0; index < state.subjectList.length; index++) {
-        if (boardIdToUpdate === state.subjectList[index].id) {
-          state.subjectList[index] = boardToUpdate;
+        if (subjectIdToUpdate === state.subjectList[index].id) {
+          state.subjectList[index] = subjectToUpdate;
         }
       }
       return {
         ...state,
       };
     case subjectActionTypes.API_DELETE_SUBJECT + apiExecutionState.FINISHED:
-      const boardIdToDelete = action.payload;
+      const subjectIdToDelete = action.payload;
       for (let index = 0; index < state.subjectList.length; index++) {
-        if (boardIdToDelete === state.subjectList[index].id) {
+        if (subjectIdToDelete === state.subjectList[index].id) {
           state.subjectList.splice(index, 1);
         }
       }

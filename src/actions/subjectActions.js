@@ -1,4 +1,4 @@
-import { subjectActionTypes, CALL_API } from './actionTypes';
+import {subjectActionTypes, CALL_API} from './actionTypes';
 
 export function getAllSubjects(instituteId) {
   return {
@@ -6,6 +6,19 @@ export function getAllSubjects(instituteId) {
     apiType: CALL_API,
     callAPI: {
       apiPathWithParam: `/admin/subjects/${instituteId}`,
+      options: {
+        method: 'GET'
+      }
+    },
+  };
+}
+
+export function getAllSubjectLookUp(instituteId) {
+  return {
+    type: subjectActionTypes.API_GET_ALL_SUBJECTS_LOOKUP,
+    apiType: CALL_API,
+    callAPI: {
+      apiPathWithParam: `/admin/subjects/${instituteId}/lookup`,
       options: {
         method: 'GET'
       }
