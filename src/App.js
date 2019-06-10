@@ -14,6 +14,7 @@ import Chapter from "./containers/Chapter";
 import Batch from "./containers/Batch";
 import Student from "./containers/Student";
 import Footer from "./components/DashBoard/Footer";
+import TimeTable from "./containers/TimeTable/TimeTable";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                   <AuthenticatedRoute exact path='/chapter' component={Chapter}/>
                   <AuthenticatedRoute exact path='/batch' component={Batch}/>
                   <AuthenticatedRoute exact path='/student' component={Student}/>
+                  <AuthenticatedRoute exact path='/timetable' component={TimeTable}/>
                 </Switch>
               </div>
             </div>

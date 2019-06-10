@@ -76,6 +76,8 @@ class PrimaryMenuList extends React.Component {
       return <DashboardIcon/>
     } else if (['board', 'standard', 'subject', 'chapter', 'batch', 'student'].includes(iconName)) {
       return <ViewHeadline/>
+    } else if (iconName === 'timetable') {
+      return <AvTimer/>
     }
   };
 
@@ -199,12 +201,7 @@ class PrimaryMenuList extends React.Component {
           </List>
         </Collapse>
 
-        <ListItem button>
-          <ListItemIcon>
-            <AvTimer/>
-          </ListItemIcon>
-          <ListItemText inset primary="Time Table"/>
-        </ListItem>
+        {this.renderListItem('/timetable', classes, 'timetable', 'Time Table', false)}
 
         <ListItem button onClick={this.handleReportsClick}>
           <ListItemIcon>
