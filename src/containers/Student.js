@@ -19,7 +19,8 @@ const styles = theme => ({
   },
   button: {
     marginRight: 8,
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 20
   },
   instructions: {
     marginTop: 8,
@@ -34,11 +35,13 @@ class Student extends Component {
     this.state = {
       activeStep: 0,
       steps: this.getSteps(),
-
       studentPersonalDetailsErrors: [],
+      parentDetailsErrors: [],
     }
   }
-  isStudentPersonalDetailsFormInValid = false
+
+  isStudentPersonalDetailsFormInValid = false;
+  isParentDetailsFormInValid = false;
 
   studentPersonalDetailsRequiredFields = [
     'firstName',
@@ -50,20 +53,77 @@ class Student extends Component {
     'email',
     'address',
     'city',
-    'state',
     'zip',
-    'country'
   ];
 
-  studentPersonalDetailsFieldsValue = [];
+  studentPersonalDetailsFieldsValue = [
+    {
+      country: 'India'
+    },
+    {
+      state: 'Maharashtra'
+    }
+  ];
 
-  onChangeStudentPersoanlDetailsFormField = (data) => {
+  parentDetailsRequiredFields = [
+    'firstName',
+    'lastName',
+    'userName',
+    'password',
+    'mobile',
+    'gender',
+    'email'
+  ];
+
+  parentDetailsFieldsValue =  [];
+
+  makeUserName = (length) => {
+    var name = this.studentPersonalDetailsFieldsValue.firstName + this.studentPersonalDetailsFieldsValue.lastName;
+    var userName = '';
+    var characters = name;
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      userName += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return userName;
+  };
+
+  onChangeStudentPersonalDetailsFormField = (data) => {
     const {name, value} = data;
+    const {studentPersonalDetailsErrors} = this.state;
     this.studentPersonalDetailsFieldsValue[name] = value;
-    if (value && value.length > 0 ) {
-      const studentPersonalDetailsErrors = this.state.studentPersonalDetailsErrors;
+    if (value && value.length > 0) {
       studentPersonalDetailsErrors[name] = false;
-      this.setState({ studentPersonalDetailsErrors, isStudentPersonalDetailsFormValid: false });    }
+      this.setState({studentPersonalDetailsErrors, isStudentPersonalDetailsFormValid: false});
+    }
+    if (this.studentPersonalDetailsFieldsValue.userName && this.studentPersonalDetailsFieldsValue.userName.trim().length > 0) {
+      return;
+    } else if (this.studentPersonalDetailsFieldsValue.firstName && this.studentPersonalDetailsFieldsValue.lastName && this.studentPersonalDetailsFieldsValue.firstName.trim().length > 0 && this.studentPersonalDetailsFieldsValue.lastName.trim().length > 0) {
+      const studentPersonalDetailsFieldsValue = this.studentPersonalDetailsFieldsValue;
+      studentPersonalDetailsFieldsValue.userName = this.makeUserName(6);
+      console.log('studentPersonalDetailsFieldsValue ', studentPersonalDetailsFieldsValue.userName);
+      studentPersonalDetailsErrors.userName = false;
+      this.setState({studentPersonalDetailsErrors});
+    }
+  };
+
+  onChangeParentDetailsFormField = (data) => {
+    const {name, value} = data;
+    const {parentDetailsErrors} = this.state;
+    this.parentDetailsFieldsValue[name] = value;
+    if (value && value.length > 0) {
+      parentDetailsErrors[name] = false;
+      this.setState({parentDetailsErrors, isParentDetailsFormInValid: false});
+    }
+    if (this.parentDetailsFieldsValue.userName && this.parentDetailsFieldsValue.userName.trim().length > 0) {
+      return;
+    } else if (this.parentDetailsFieldsValue.firstName && this.parentDetailsFieldsValue.lastName && this.parentDetailsFieldsValue.firstName.trim().length > 0 && this.parentDetailsFieldsValue.lastName.trim().length > 0) {
+      const parentDetailsRequiredFields = this.parentDetailsFieldsValue;
+      parentDetailsRequiredFields.userName = this.makeUserName(6);
+      console.log('parentDetailsFieldsValue ', parentDetailsRequiredFields.userName);
+      parentDetailsErrors.userName = false;
+      this.setState({parentDetailsErrors});
+    }
   };
 
   getSteps = () => {
@@ -73,9 +133,13 @@ class Student extends Component {
   getStepContent = (step) => {
     switch (step) {
       case 0:
-        return <StudentPersonalDetailsForm onChange={this.onChangeStudentPersoanlDetailsFormField} errors={this.state.studentPersonalDetailsErrors}/>;
+        return <StudentPersonalDetailsForm onChange={this.onChangeStudentPersonalDetailsFormField}
+                                           errors={this.state.studentPersonalDetailsErrors}
+                                           values={this.studentPersonalDetailsFieldsValue}/>;
       case 1:
-        return <ParendDetailsForm/>;
+        return <ParendDetailsForm onChange={this.onChangeParentDetailsFormField}
+                                  errors={this.state.parentDetailsErrors}
+                                  values={this.parentDetailsFieldsValue}/>;
       case 2:
         return <StudentAcademicDetailsForm/>;
       default:
@@ -84,31 +148,55 @@ class Student extends Component {
   };
 
   isStepFailed = (step) => {
-    if (step === 0 ) {
+    if (step === 0) {
       return this.isStudentPersonalDetailsFormInValid;
+    } else  if (step === 1) {
+      return this.isParentDetailsFormInValid;
     }
     return false;
   };
 
   handleNext = () => {
-    const { studentPersonalDetailsErrors } = this.state;
-    this.studentPersonalDetailsRequiredFields.forEach(field => {
-      if (!this.studentPersonalDetailsFieldsValue[field]) {
-        studentPersonalDetailsErrors[field] = true;
-        this.setState({ studentPersonalDetailsErrors });
-      }
-    });
+    const {studentPersonalDetailsErrors, parentDetailsErrors, activeStep} = this.state;
+    console.log(this.studentPersonalDetailsFieldsValue)
+    if (activeStep === 0) {
+      this.studentPersonalDetailsRequiredFields.forEach(field => {
+        if (!this.studentPersonalDetailsFieldsValue[field]) {
+          studentPersonalDetailsErrors[field] = true;
+          this.setState({studentPersonalDetailsErrors});
+        }
+      });
 
-    for (var errorKey in studentPersonalDetailsErrors) {
-      if (studentPersonalDetailsErrors.hasOwnProperty(errorKey)) {
-        if (studentPersonalDetailsErrors[errorKey] === true) {
-          this.isStudentPersonalDetailsFormInValid = true
-          return;
+      for (var errorKey in studentPersonalDetailsErrors) {
+        if (studentPersonalDetailsErrors.hasOwnProperty(errorKey)) {
+          if (studentPersonalDetailsErrors[errorKey] === true) {
+            this.isStudentPersonalDetailsFormInValid = true;
+            return;
+          }
         }
       }
-    }
-    this.isStudentPersonalDetailsFormInValid = false;
+      this.isStudentPersonalDetailsFormInValid = false;
+    } else if (activeStep === 1) {
 
+      this.parentDetailsRequiredFields.forEach(field => {
+        if (!this.parentDetailsFieldsValue[field]) {
+          parentDetailsErrors[field] = true;
+          this.setState({parentDetailsErrors});
+        }
+      });
+
+      for (var errorKey in parentDetailsErrors) {
+        if (parentDetailsErrors.hasOwnProperty(errorKey)) {
+          if (parentDetailsErrors[errorKey] === true) {
+            this.isParentDetailsFormInValid = true;
+            return;
+          }
+        }
+      }
+      this.isParentDetailsFormInValid = false;
+    } else if (activeStep === 2) {
+
+    }
     this.setState({
       activeStep: this.state.activeStep + 1
     })
@@ -126,7 +214,7 @@ class Student extends Component {
 
   render() {
     const {classes} = this.props;
-    const { activeStep, steps } = this.state;
+    const {activeStep, steps} = this.state;
     return (
       <div className={classes.root}>
         <Stepper className={classes.root} activeStep={this.state.activeStep}>
@@ -140,7 +228,6 @@ class Student extends Component {
                 </Typography>
               );
             }*/
-            console.log('label : ', label, ': ',  index)
             if (this.isStepFailed(index)) {
               labelProps.error = true;
             }

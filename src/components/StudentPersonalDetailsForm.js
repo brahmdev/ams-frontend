@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
 
 export default class StudentPersonalDetailsForm extends Component {
 
@@ -11,6 +16,10 @@ export default class StudentPersonalDetailsForm extends Component {
   textFieldStyle = {
     width: '80%'
   };
+  formControl = {
+    margin: 8,
+    width: '100%',
+  };
 
   handleChange = (event) => {
     const {name, value} = event.target;
@@ -18,7 +27,7 @@ export default class StudentPersonalDetailsForm extends Component {
   };
 
   render() {
-    const {errors} = this.props;
+    const {errors, values} = this.props;
     return (
       <React.Fragment>
         <Typography variant="h6" gutterBottom>
@@ -31,6 +40,7 @@ export default class StudentPersonalDetailsForm extends Component {
               autoFocus
               style={this.textFieldStyle}
               id="firstName"
+              value={values['firstName'] ? values['firstName'] : ''}
               name="firstName"
               label="First name"
               onChange={(e) => this.handleChange(e)}
@@ -43,6 +53,7 @@ export default class StudentPersonalDetailsForm extends Component {
               required
               style={this.textFieldStyle}
               id="lastName"
+              value={values['lastName'] ? values['lastName'] : ''}
               name="lastName"
               label="Last name"
               onChange={(e) => this.handleChange(e)}
@@ -56,6 +67,7 @@ export default class StudentPersonalDetailsForm extends Component {
               style={this.textFieldStyle}
               id="userName"
               name="userName"
+              value={values['userName'] ? values['userName'] : ''}
               label="UserName"
               onChange={(e) => this.handleChange(e)}
               error={errors['userName'] ? errors['userName'] : false}
@@ -66,6 +78,7 @@ export default class StudentPersonalDetailsForm extends Component {
               required
               style={this.textFieldStyle}
               id="password"
+              value={values['password'] ? values['password'] : ''}
               name="password"
               label="Password"
               onChange={(e) => this.handleChange(e)}
@@ -77,27 +90,36 @@ export default class StudentPersonalDetailsForm extends Component {
             <TextField
               style={this.textFieldStyle}
               id="bloodGrp"
+              value={values['bloodGrp'] ? values['bloodGrp'] : ''}
               name="bloodGrp"
               label="Blood Group"
+              onChange={(e) => this.handleChange(e)}
             />
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
-            <TextField
+            <FormControl style={this.formControl}>
+            <InputLabel required htmlFor="gender">Gender</InputLabel>
+            <Select
+              value={values['gender'] ? values['gender'] : ''}
+              onChange={(e) => this.handleChange(e)}
               required
               style={this.textFieldStyle}
-              id="gender"
-              name="gender"
-              label="Gender"
-              onChange={(e) => this.handleChange(e)}
-              fullWidth
+              input={<Input required name="gender" id="gender" />}
+              autoWidth
               error={errors['gender'] ? errors['gender'] : false}
-            />
+            >
+              <MenuItem value={'male'}>Male</MenuItem>
+              <MenuItem value={'female'}>Female</MenuItem>
+              <MenuItem value={'others'}>Others</MenuItem>
+            </Select>
+            </FormControl>
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <TextField
               required
               style={this.textFieldStyle}
               id="email"
+              value={values['email'] ? values['email'] : ''}
               name="email"
               label="Email"
               onChange={(e) => this.handleChange(e)}
@@ -110,6 +132,8 @@ export default class StudentPersonalDetailsForm extends Component {
               required
               style={this.textFieldStyle}
               id="mobile"
+              value={values['mobile'] ? values['mobile'] : ''}
+              type="number"
               name="mobile"
               label="Mobile"
               onChange={(e) => this.handleChange(e)}
@@ -120,6 +144,8 @@ export default class StudentPersonalDetailsForm extends Component {
             <TextField
               style={this.textFieldStyle}
               id="phone"
+              value={values['phone'] ? values['phone'] : ''}
+              type="number"
               name="phone"
               onChange={(e) => this.handleChange(e)}
               label="Phone"
@@ -129,6 +155,7 @@ export default class StudentPersonalDetailsForm extends Component {
             <TextField
               required
               id="address"
+              value={values['address'] ? values['address'] : ''}
               name="address"
               label="Address"
               fullWidth
@@ -144,6 +171,7 @@ export default class StudentPersonalDetailsForm extends Component {
               style={this.textFieldStyle}
               required
               id="city"
+              value={values['city'] ? values['city'] : ''}
               name="city"
               label="City"
               autoComplete="billing address-level2"
@@ -155,6 +183,8 @@ export default class StudentPersonalDetailsForm extends Component {
             <TextField
               required
               id="state"
+              value={'Maharashtra'}
+              readOnly
               style={this.textFieldStyle}
               name="state"
               label="State/Province/Region"
@@ -167,6 +197,7 @@ export default class StudentPersonalDetailsForm extends Component {
               required
               style={this.textFieldStyle}
               id="zip"
+              value={values['zip'] ? values['zip'] : ''}
               name="zip"
               label="Zip / Postal code"
               autoComplete="billing postal-code"
@@ -179,7 +210,9 @@ export default class StudentPersonalDetailsForm extends Component {
               required
               style={this.textFieldStyle}
               id="country"
+              value={'India'}
               name="country"
+              readOnly
               label="Country"
               autoComplete="billing country"
               onChange={(e) => this.handleChange(e)}
@@ -189,17 +222,18 @@ export default class StudentPersonalDetailsForm extends Component {
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <TextField
               id="language"
+              value={values['language'] ? values['language'] : ''}
               style={this.textFieldStyle}
               name="language"
               label="Language"
               onChange={(e) => this.handleChange(e)}
             />
           </Grid>
-          {Object.keys(errors).length > 0 ? <Grid style={this.gridStyle} container item xs={12} spacing={8}>
+          <Grid style={this.gridStyle} container item xs={12} spacing={8}>
             <Typography variant="body2" gutterBottom style={{color: 'red'}}>
-              All * mark fields are mandatory!
+              (All * mark fields are mandatory!)
             </Typography>
-          </Grid> : null}
+          </Grid>
         </Grid>
       </React.Fragment>
     );
