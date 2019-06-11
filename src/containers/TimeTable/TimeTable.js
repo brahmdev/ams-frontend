@@ -3,36 +3,121 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import bootstrapPlugin from '@fullcalendar/bootstrap';
+import interactionPlugin from '@fullcalendar/interaction';
 
-import './main.scss' // webpack must be configured to do this
+import './main.scss'
+import AddSchedule from "./AddSchedule";
+import {withStyles} from "@material-ui/core"; // webpack must be configured to do this
 
-export default class TimeTable extends React.Component {
+const styles = theme => ({
+
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing * 4,
+    outline: 'none',
+  },
+
+});
+class TimeTable extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false
+    };
+    this.calendarRef = React.createRef();
+  }
+
+  rand() {
+    return Math.round(Math.random() * 20) - 10;
+  }
+
+  getModalStyle() {
+    const top = 50 + this.rand();
+    const left = 50 + this.rand();
+
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+    };
+  }
+
+  handleClose = (event) => {
+    this.setState({open: false})
+  };
 
   render() {
+    const {classes} = this.props;
+
     return (
+      <div>
       <FullCalendar
+        ref={this.calendarRef}
         defaultView="dayGridMonth"
-        plugins={[ dayGridPlugin, timeGridPlugin, bootstrapPlugin ]}
-        themeSystem= 'bootstrap'
+        plugins={[dayGridPlugin, timeGridPlugin, bootstrapPlugin, interactionPlugin]}
+        themeSystem='bootstrap'
         header={{
-          left : 'dayGridMonth,timeGridWeek,timeGridDay custom1',
+          left: 'dayGridMonth,timeGridWeek,timeGridDay addSchedule',
           center: 'title',
-          right: 'custom2 prevYear,prev,next,nextYear'
+          right: 'save today prevYear,prev,next,nextYear'
         }}
         customButtons={{
-          custom1: {
-            text: 'custom 1',
-            click: function () {
-              alert('clicked custom button 1!');
+          addSchedule: {
+            text: 'Add Schedule',
+            click: () => {
+              console.log(this.calendarRef)
+              let calendarApi = this.calendarRef.current.getApi()
+              console.log('all events ', calendarApi.getEvents());
+              this.setState({open: true})
+            }
+          },
+          save: {
+            text: 'Save',
+            click: () => {
+              console.log(this.calendarRef);
+              alert('calendar will be saved now in database')
+              let calendarApi = this.calendarRef.current.getApi()
+              console.log('all events ', calendarApi.getEvents());
             }
           }
         }}
+        editable
+        eventStartEditable
+        eventResizableFromStart
+        eventLimit={3}
         events={[
-          { title: 'event 1', date: '2019-06-01' },
-          { title: 'event 2', date: '2019-06-02' }
+          {
+            title: "My repeating event\ntest",
+            startTime: '10:00', // a start time (10am in this example)
+            endTime: '14:00', // an end time (6pm in this example)
+            daysOfWeek: [1, 4], // Repeat monday and thursday
+            startRecur: new Date('2019-06-05'),
+            endRecur: new Date('2019-06-15'),
+          },
+          {
+            title: "My repeating event 2",
+            start: '2019-06-19',
+            end: '2019-06-19',
+
+          }
         ]}
+        eventResize={(info) => {
+          alert(info.event.title + " end is now from " + info.event.start + ' till ' + info.event.end.toISOString());
+        }
+        }
       />
+        <AddSchedule
+          selectedValue={this.state.selectedValue}
+          open={this.state.open}
+          onClose={(e) => this.handleClose(e)}
+        />
+      </div>
     )
   }
 
 }
+export default withStyles(styles)(TimeTable);
