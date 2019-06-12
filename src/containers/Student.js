@@ -50,20 +50,18 @@ class Student extends Component {
     'password',
     'mobile',
     'gender',
+    'dob',
     'email',
     'address',
     'city',
     'zip',
   ];
 
-  studentPersonalDetailsFieldsValue = [
-    {
-      country: 'India'
-    },
-    {
-      state: 'Maharashtra'
-    }
-  ];
+  studentPersonalDetailsFieldsValue =  {
+    dob: new Date(),
+    state: 'Maharashtra',
+    country: 'India'
+  };
 
   parentDetailsRequiredFields = [
     'firstName',
@@ -88,11 +86,15 @@ class Student extends Component {
     return userName;
   };
 
+  isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+  }
+
   onChangeStudentPersonalDetailsFormField = (data) => {
     const {name, value} = data;
     const {studentPersonalDetailsErrors} = this.state;
     this.studentPersonalDetailsFieldsValue[name] = value;
-    if (value && value.length > 0) {
+    if ((value && value.length > 0) || (name === 'dob' && this.isValidDate(value))) {
       studentPersonalDetailsErrors[name] = false;
       this.setState({studentPersonalDetailsErrors, isStudentPersonalDetailsFormValid: false});
     }
@@ -101,7 +103,6 @@ class Student extends Component {
     } else if (this.studentPersonalDetailsFieldsValue.firstName && this.studentPersonalDetailsFieldsValue.lastName && this.studentPersonalDetailsFieldsValue.firstName.trim().length > 0 && this.studentPersonalDetailsFieldsValue.lastName.trim().length > 0) {
       const studentPersonalDetailsFieldsValue = this.studentPersonalDetailsFieldsValue;
       studentPersonalDetailsFieldsValue.userName = this.makeUserName(6);
-      console.log('studentPersonalDetailsFieldsValue ', studentPersonalDetailsFieldsValue.userName);
       studentPersonalDetailsErrors.userName = false;
       this.setState({studentPersonalDetailsErrors});
     }
@@ -120,7 +121,6 @@ class Student extends Component {
     } else if (this.parentDetailsFieldsValue.firstName && this.parentDetailsFieldsValue.lastName && this.parentDetailsFieldsValue.firstName.trim().length > 0 && this.parentDetailsFieldsValue.lastName.trim().length > 0) {
       const parentDetailsRequiredFields = this.parentDetailsFieldsValue;
       parentDetailsRequiredFields.userName = this.makeUserName(6);
-      console.log('parentDetailsFieldsValue ', parentDetailsRequiredFields.userName);
       parentDetailsErrors.userName = false;
       this.setState({parentDetailsErrors});
     }

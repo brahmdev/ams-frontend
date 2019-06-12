@@ -7,6 +7,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
+import DateFnsUtils from '@date-io/date-fns';
+import {MuiPickersUtilsProvider, TimePicker, DatePicker} from 'material-ui-pickers';
+
 
 export default class StudentPersonalDetailsForm extends Component {
 
@@ -24,6 +27,11 @@ export default class StudentPersonalDetailsForm extends Component {
   handleChange = (event) => {
     const {name, value} = event.target;
     this.props.onChange({name, value});
+  };
+
+  handleDateChange = (date) => {
+    const name = 'dob';
+    this.props.onChange({name, value: date});
   };
 
   render() {
@@ -98,21 +106,32 @@ export default class StudentPersonalDetailsForm extends Component {
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <FormControl style={this.formControl}>
-            <InputLabel required htmlFor="gender">Gender</InputLabel>
-            <Select
-              value={values['gender'] ? values['gender'] : ''}
-              onChange={(e) => this.handleChange(e)}
-              required
-              style={this.textFieldStyle}
-              input={<Input required name="gender" id="gender" />}
-              autoWidth
-              error={errors['gender'] ? errors['gender'] : false}
-            >
-              <MenuItem value={'male'}>Male</MenuItem>
-              <MenuItem value={'female'}>Female</MenuItem>
-              <MenuItem value={'others'}>Others</MenuItem>
-            </Select>
+              <InputLabel required htmlFor="gender">Gender</InputLabel>
+              <Select
+                value={values['gender'] ? values['gender'] : ''}
+                onChange={(e) => this.handleChange(e)}
+                required
+                style={this.textFieldStyle}
+                input={<Input required name="gender" id="gender"/>}
+                autoWidth
+                error={errors['gender'] ? errors['gender'] : false}
+              >
+                <MenuItem value={'male'}>Male</MenuItem>
+                <MenuItem value={'female'}>Female</MenuItem>
+                <MenuItem value={'others'}>Others</MenuItem>
+              </Select>
             </FormControl>
+          </Grid>
+          <Grid style={this.gridStyle} container item xs={6} spacing={8}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+            <DatePicker
+              margin="normal"
+              label="Date of Birth"
+              value={values['dob'] ? values['dob'] : ''}
+              onChange={(date) => this.handleDateChange(date)}
+            />
+            </MuiPickersUtilsProvider>
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <TextField
