@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import MaterialTable from 'material-table';
 import {withStyles} from "@material-ui/core";
-import { getAllBoards, createBoard, deleteBoard, updateBoard } from "../actions/boardActions";
-import { getAllBranchesLookUp } from '../actions/branchActions';
+import { getAllBranches, createBranch, deleteBranch, updateBranch } from "../actions/branchActions";
 import connect from "react-redux/es/connect/connect";
-import { getBranchId, getInstituteId } from "../utils/userInfo";
+import { getInstituteId } from "../utils/userInfo";
 
 const styles = theme => ({
 
@@ -18,45 +17,34 @@ const styles = theme => ({
 });
 
 
-class Board extends Component {
+class Branch extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       columns: [
-        {title: 'Board Code', field: 'code'},
-        {title: 'Board Name', field: 'name'},
-        {title: 'Branch Code', field: 'branch.id', lookup: this.props.branch.branchLookup},
+        {title: 'Code', field: 'code'},
+        {title: 'Name', field: 'name'},
+        {title: 'Address', field: 'address'},
       ]
     }
   }
 
   componentDidMount() {
-    const branchId = getBranchId();
     const instituteId = getInstituteId();
-    this.props.getAllBranchesLookUp(instituteId);
-    this.props.getAllBoards(branchId);
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (Object.keys(nextProps.branch.branchLookup).length > 1) {
-      const columns = prevState.columns;
-      columns[2].lookup = nextProps.branch.branchLookup;
-      return ({ columns }) // <- this is setState equivalent
-    }
-    return null;
+    this.props.getAllBranches(instituteId);
   }
 
   render() {
-    const {classes, board} = this.props;
-    const branchId = getBranchId();
+    const {classes, branch} = this.props;
+    const instituteId = getInstituteId();
 
     return (
       <div className={classes.content}>
         <MaterialTable
-          title="Board"
+          title="Branch"
           columns={this.state.columns}
-          data={board.boardList}
+          data={branch.branchList}
           options={{
             exportButton: true,
             actionsColumnIndex: -1,
@@ -71,12 +59,11 @@ class Board extends Component {
               new Promise((resolve, reject) => {
                 setTimeout(() => {
                   {
-                    const branch = {
-                      "id" : newData['branch.id']
+                    const institute = {
+                      "id" : instituteId
                     };
-
-                    newData.branch = branch;
-                    this.props.createBoard(newData);
+                    newData.institute = institute;
+                    this.props.createBranch(newData);
                   }
                   resolve()
                 }, 2000)
@@ -85,12 +72,11 @@ class Board extends Component {
               new Promise((resolve, reject) => {
                 setTimeout(() => {
                   {
-                    const branch = {
-                      "id" : newData['branch.id'] ? newData['branch.id'] : oldData.branch.id
+                    const institute = {
+                      "id" : instituteId
                     };
-
-                    newData.branch = branch;
-                    this.props.updateBoard(newData)
+                    newData.institute = institute;
+                    this.props.updateBranch(newData)
                   }
                   resolve()
                 }, 1000)
@@ -98,7 +84,7 @@ class Board extends Component {
             onRowDelete: oldData =>
               new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    this.props.deleteBoard(oldData.id);
+                    this.props.deleteBranch(oldData.id);
                   resolve()
                 }, 1000)
               }),
@@ -110,16 +96,16 @@ class Board extends Component {
 }
 
 function mapStateToProps(state) {
-  const { branch, board} = state;
-  return { branch, board };
+  return {
+    branch: state.branch
+  };
 }
 
 const mapDispatchToProps = {
-  getAllBranchesLookUp,
-  getAllBoards,
-  createBoard,
-  deleteBoard,
-  updateBoard
+  getAllBranches,
+  createBranch,
+  deleteBranch,
+  updateBranch
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Board));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Branch));

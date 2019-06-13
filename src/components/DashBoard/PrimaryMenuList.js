@@ -74,7 +74,7 @@ class PrimaryMenuList extends React.Component {
   renderIcon = (iconName) => {
     if (iconName === 'dashBoard') {
       return <DashboardIcon/>
-    } else if (['board', 'standard', 'subject', 'chapter', 'batch', 'student'].includes(iconName)) {
+    } else if (['branch', 'board', 'standard', 'subject', 'chapter', 'batch', 'student'].includes(iconName)) {
       return <ViewHeadline/>
     } else if (iconName === 'timetable') {
       return <AvTimer/>
@@ -113,6 +113,11 @@ class PrimaryMenuList extends React.Component {
           <ListItemText inset primary="Academics"/>
           {this.state.academic ? <ExpandLess/> : <ExpandMore/>}
         </ListItem>
+        <Collapse in={this.state.academic} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {this.renderListItem('/branch', classes, 'branch', 'Branch', true)}
+          </List>
+        </Collapse>
         <Collapse in={this.state.academic} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {this.renderListItem('/board', classes, 'board', 'Board', true)}

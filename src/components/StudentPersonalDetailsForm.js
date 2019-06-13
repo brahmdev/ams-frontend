@@ -124,13 +124,11 @@ export default class StudentPersonalDetailsForm extends Component {
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-
-            <DatePicker
-              margin="normal"
-              label="Date of Birth"
-              value={values['dob'] ? values['dob'] : ''}
-              onChange={(date) => this.handleDateChange(date)}
-            />
+              <DatePicker
+                label="Date of Birth"
+                value={values['dob'] ? values['dob'] : ''}
+                onChange={(date) => this.handleDateChange(date)}
+              />
             </MuiPickersUtilsProvider>
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>

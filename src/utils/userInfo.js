@@ -16,6 +16,14 @@ export function getInstituteId() {
   return window.localStorage.getItem('instituteId');
 }
 
+export function setBranchId(branchId) {
+  window.localStorage.setItem('branchId', branchId);
+}
+
+export function getBranchId() {
+  return window.localStorage.getItem('branchId');
+}
+
 export function getAdmin() {
   return !!JSON.parse(window.localStorage.getItem('admin'));
 }

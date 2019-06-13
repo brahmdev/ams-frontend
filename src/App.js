@@ -15,6 +15,7 @@ import Batch from "./containers/Batch";
 import Student from "./containers/Student";
 import Footer from "./components/DashBoard/Footer";
 import TimeTable from "./containers/TimeTable/TimeTable";
+import Branch from "./containers/Branch";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                 <Switch>
                   <AuthenticatedRoute exact path='/' component={Dashboard}/>
                   <Route exact path='/login' component={SignIn}/>
+                  <AuthenticatedRoute exact path='/branch' component={Branch}/>
                   <AuthenticatedRoute exact path='/board' component={Board}/>
                   <AuthenticatedRoute exact path='/standard' component={Standard}/>
                   <AuthenticatedRoute exact path='/subject' component={Subject}/>

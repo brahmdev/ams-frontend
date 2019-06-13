@@ -8,7 +8,10 @@ import {withStyles} from "@material-ui/core";
 import connect from "react-redux/es/connect/connect";
 import StudentPersonalDetailsForm from "../components/StudentPersonalDetailsForm";
 import ParendDetailsForm from "../components/ParendDetailsForm";
+import StudentAcademicDetails from "./StudentAcademicDetails";
 import StudentAcademicDetailsForm from "../components/StudentAcademicDetailsForm";
+import {getInstituteId} from "../utils/userInfo";
+import { getAllStandardLookUpForStudent, getAllBatchOfStandardLookUp } from "../actions/studentActions";
 
 const styles = theme => ({
 
@@ -37,6 +40,7 @@ class Student extends Component {
       steps: this.getSteps(),
       studentPersonalDetailsErrors: [],
       parentDetailsErrors: [],
+      studentAcademicDetailsErrors: []
     }
   }
 
@@ -73,7 +77,23 @@ class Student extends Component {
     'email'
   ];
 
-  parentDetailsFieldsValue =  [];
+  parentDetailsFieldsValue =  {};
+
+  studentAcademicDetailsRequiredFields = [
+    'rollNo',
+    'admissionDate',
+    'standard',
+    'batch'
+  ];
+
+  studentAcademicDetailsFieldsValue = {
+    admissionDate: new Date()
+  };
+
+  componentDidMount() {
+    const instituteId = getInstituteId();
+    this.props.getAllStandardLookUpForStudent(instituteId);
+  }
 
   makeUserName = (length) => {
     var name = this.studentPersonalDetailsFieldsValue.firstName + this.studentPersonalDetailsFieldsValue.lastName;
@@ -126,11 +146,27 @@ class Student extends Component {
     }
   };
 
+  onChangeStudentAcademicDetailsFormField = (data) => {
+    const {name, value} = data;
+    const {studentAcademicDetailsErrors} = this.state;
+    this.studentAcademicDetailsFieldsValue[name] = value;
+    if (value && value.length > 0) {
+      studentAcademicDetailsErrors[name] = false;
+      this.setState({studentAcademicDetailsErrors, isParentDetailsFormInValid: false});
+    }
+  };
+
   getSteps = () => {
     return ['Personal Details', 'Parent Details', 'Academic Details'];
   };
 
+  handleStandardChange(standardId) {
+    this.props.getAllBatchOfStandardLookUp(standardId);
+  }
+
   getStepContent = (step) => {
+    const { student: {standardLookUp}} = this.props;
+    console.log('standardLookup', standardLookUp)
     switch (step) {
       case 0:
         return <StudentPersonalDetailsForm onChange={this.onChangeStudentPersonalDetailsFormField}
@@ -141,7 +177,12 @@ class Student extends Component {
                                   errors={this.state.parentDetailsErrors}
                                   values={this.parentDetailsFieldsValue}/>;
       case 2:
-        return <StudentAcademicDetailsForm/>;
+        return <StudentAcademicDetailsForm onChange={this.onChangeStudentAcademicDetailsFormField}
+                                          errors={this.state.studentAcademicDetailsErrors}
+                                          values={this.studentAcademicDetailsFieldsValue}
+                                        standardLookUp={this.props.student.standardLookUp}
+                                        onStandardChange={(standardId) => this.handleStandardChange(standardId)}
+                                        batchLookUp={this.props.student.batchLookUp}/>;
       default:
         return 'Unknown step';
     }
@@ -159,7 +200,7 @@ class Student extends Component {
   handleNext = () => {
     const {studentPersonalDetailsErrors, parentDetailsErrors, activeStep} = this.state;
     console.log(this.studentPersonalDetailsFieldsValue)
-    if (activeStep === 0) {
+    /*if (activeStep === 0) {
       this.studentPersonalDetailsRequiredFields.forEach(field => {
         if (!this.studentPersonalDetailsFieldsValue[field]) {
           studentPersonalDetailsErrors[field] = true;
@@ -196,7 +237,7 @@ class Student extends Component {
       this.isParentDetailsFormInValid = false;
     } else if (activeStep === 2) {
 
-    }
+    }*/
     this.setState({
       activeStep: this.state.activeStep + 1
     })
@@ -215,6 +256,7 @@ class Student extends Component {
   render() {
     const {classes} = this.props;
     const {activeStep, steps} = this.state;
+    console.log('in parent render')
     return (
       <div className={classes.root}>
         <Stepper className={classes.root} activeStep={this.state.activeStep}>
@@ -275,10 +317,13 @@ class Student extends Component {
 }
 
 function mapStateToProps(state) {
-  const {subject, standard} = state;
-  return {standard, subject};
+  const {subject, standard, student} = state;
+  return {standard, subject, student};
 }
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  getAllStandardLookUpForStudent,
+  getAllBatchOfStandardLookUp
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Student));

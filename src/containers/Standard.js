@@ -74,8 +74,6 @@ class Standard extends Component {
               new Promise((resolve, reject) => {
                 setTimeout(() => {
                   {
-                    console.log('BEFORE ', newData['board.id'])
-
                     const board = {
                       "id" : newData['board.id']
                     };
@@ -89,7 +87,6 @@ class Standard extends Component {
 
                     delete newData['board.id'];
                     delete newData['language.id'];
-                    console.log(newData)
                     this.props.createStandard(newData);
                   }
                   resolve()

@@ -1,88 +1,156 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import React, {Component} from 'react';
 import Grid from '@material-ui/core/Grid';
-import {withStyles} from "@material-ui/core";
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
 
-const products = [
-  { name: 'Product 1', desc: 'A nice thing', price: '$9.99' },
-  { name: 'Product 2', desc: 'Another thing', price: '$3.45' },
-  { name: 'Product 3', desc: 'Something else', price: '$6.51' },
-  { name: 'Product 4', desc: 'Best thing of all', price: '$14.11' },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
-const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
+import DateFnsUtils from '@date-io/date-fns';
+import {MuiPickersUtilsProvider, DatePicker} from 'material-ui-pickers';
 
-const useStyles = theme => ({
-  listItem: {
-    padding: 8,
-  },
-  total: {
-    fontWeight: '700',
-  },
-  title: {
-    marginTop: 16,
-  },
-});
+import Switch from '@material-ui/core/Switch';
 
-function StudentAcademicDetailsForm() {
-  const classes = useStyles();
+export default class StudentAcademicDetailsForm extends Component {
 
-  return (
-    <React.Fragment>
-      <Typography variant="h6" gutterBottom>
-        Order summary
-      </Typography>
-      <List disablePadding>
-        {products.map(product => (
-          <ListItem className={classes.listItem} key={product.name}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
-          </ListItem>
-        ))}
-        <ListItem className={classes.listItem}>
-          <ListItemText primary="Total" />
-          <Typography variant="subtitle1" className={classes.total}>
-            $34.06
-          </Typography>
-        </ListItem>
-      </List>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Typography variant="h6" gutterBottom className={classes.title}>
-            Shipping
-          </Typography>
-          <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom>{addresses.join(', ')}</Typography>
-        </Grid>
-        <Grid item container direction="column" xs={12} sm={6}>
-          <Typography variant="h6" gutterBottom className={classes.title}>
-            Payment details
-          </Typography>
-          <Grid container>
-            {payments.map(payment => (
-              <React.Fragment key={payment.name}>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.name}</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography gutterBottom>{payment.detail}</Typography>
-                </Grid>
-              </React.Fragment>
-            ))}
+  gridStyle = {
+    marginTop: 20
+  };
+  textFieldStyle = {
+    width: '80%'
+  };
+  formControl = {
+    margin: 8,
+    width: '100%',
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      admissionDate: props.values['admissionDate'],
+      hasPaidFees: false
+    }
+  }
+
+  handleChange = (event) => {
+    const {name, value} = event.target;
+    if (name === "standard") {
+      this.props.onStandardChange(value);
+    } else if (name === 'hasPaidFees') {
+      this.setState({hasPaidFees: !this.state.hasPaidFees})
+    }
+    console.log('name: ', name, ' value : ', value);
+    this.props.onChange({name, value});
+  };
+
+  createStandardMenuItem = () => {
+    let standardMenuItem = [];
+    const standardLookUp = this.props.standardLookUp;
+    for (let key of Object.keys(standardLookUp)) {
+      standardMenuItem.push(<MenuItem key={`standard_${key}`} value={key}>{standardLookUp[key]}</MenuItem>);
+    }
+    return standardMenuItem;
+  };
+
+  createBatchMenuItem = () => {
+    let batchMenuItem = [];
+    const batchLookUp = this.props.batchLookUp;
+    for (let key of Object.keys(batchLookUp)) {
+      batchMenuItem.push(<MenuItem key={`batch_${key}`} value={key}>{batchLookUp[key]}</MenuItem>);
+    }
+    return batchMenuItem;
+  };
+
+  handleDateChange = (date) => {
+    const name = 'admissionDate';
+    this.setState({admissionDate: date})
+    this.props.onChange({name, value: date});
+  };
+
+  render() {
+    const {errors, values} = this.props;
+    console.log('values ', values)
+    return (
+      <React.Fragment>
+        <Typography variant="h6" gutterBottom>
+          Parent Details
+        </Typography>
+        <Grid container spacing={8}>
+          <Grid style={this.gridStyle} container item xs={6} spacing={8}>
+            <TextField
+              required
+              autoFocus
+              style={this.textFieldStyle}
+              id="rollNo"
+              value={values['rollNo'] ? values['rollNo'] : ''}
+              name="rollNo"
+              label="Roll No."
+              onChange={(e) => this.handleChange(e)}
+              autoComplete="rno"
+              error={errors['rollNo'] ? errors['rollNo'] : false}
+            />
+          </Grid>
+          <Grid style={this.gridStyle} container item xs={6} spacing={8}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker
+                label="Admission Date"
+                value={values['admissionDate'] ? values['admissionDate'] : ''}
+                onChange={(date) => this.handleDateChange(date)}
+                disableFuture
+              />
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid style={this.gridStyle} container item xs={6} spacing={8}>
+            <FormControl style={this.formControl}>
+              <InputLabel required htmlFor="standard">Standard</InputLabel>
+              <Select
+                value={values['standard'] ? values['standard'] : ''}
+                onChange={(e) => this.handleChange(e)}
+                required
+                style={this.textFieldStyle}
+                input={<Input required name="standard" id="standard"/>}
+                autoWidth
+                error={errors['standard'] ? errors['standard'] : false}
+              >
+                {this.createStandardMenuItem()}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid style={this.gridStyle} container item xs={6} spacing={8}>
+            <FormControl style={this.formControl}>
+              <InputLabel required htmlFor="batch">Batch</InputLabel>
+              <Select
+                value={values['batch'] ? values['batch'] : ''}
+                onChange={(e) => this.handleChange(e)}
+                required
+                style={this.textFieldStyle}
+                input={<Input required name="batch" id="batch"/>}
+                autoWidth
+                error={errors['batch'] ? errors['batch'] : false}
+              >
+                {this.createBatchMenuItem()}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid style={this.gridStyle} container item xs={6} spacing={8}>
+            Paid Full Fees: <Switch
+              checked={this.state.hasPaidFees}
+              onChange={(e) => this.handleChange(e)}
+              value={values['hasPaidFees'] ? values['hasPaidFees'] : ''}
+              color="primary"
+              name={'hasPaidFees'}
+              label={'Paid Full Fees'}
+            />
+          </Grid>
+          <Grid style={this.gridStyle} container item xs={12} spacing={8}>
+            <Typography variant="body2" gutterBottom style={{color: 'red'}}>
+              (All * mark fields are mandatory!)
+            </Typography>
           </Grid>
         </Grid>
-      </Grid>
-    </React.Fragment>
-  );
+      </React.Fragment>
+    );
+  }
 }
-
-export default withStyles(useStyles)(StudentAcademicDetailsForm)
