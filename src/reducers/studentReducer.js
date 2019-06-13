@@ -21,6 +21,12 @@ export default function (state = initialState, action) {
         ...state,
         batchLookUp
       };
+    case studentAdmissionActionTypes.API_GET_STANDARD + apiExecutionState.FINISHED:
+      const standard = JSON.parse(action.response);
+      return {
+        ...state,
+        standardLookUp
+      };
     default:
       return state;
   }

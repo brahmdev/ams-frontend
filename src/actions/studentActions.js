@@ -39,23 +39,23 @@ export function getAllBatchOfStandardLookUp(standardId) {
   };
 }
 
-export function createStudent(standard) {
+export function createUser(user) {
   return {
     type: subjectActionTypes.API_CREATE_SUBJECT,
     apiType: CALL_API,
     callAPI: {
-      apiPathWithParam: `/admin/student/`,
+      apiPathWithParam: `/admin/users/`,
       options: {
         method: 'POST',
         contentType: 'application/json',
-        body: JSON.stringify(standard)
+        body: JSON.stringify(user)
       }
     },
-    payload: { standard }
+    payload: { user }
   };
 }
 
-export function updateStudent(standard) {
+export function updateStudent(user) {
   return {
     type: subjectActionTypes.API_UPDATE_SUBJECT,
     apiType: CALL_API,
@@ -64,10 +64,10 @@ export function updateStudent(standard) {
       options: {
         method: 'POST',
         contentType: 'application/json',
-        body: JSON.stringify(standard)
+        body: JSON.stringify(user)
       },
     },
-    payload: standard
+    payload: user
   };
 }
 

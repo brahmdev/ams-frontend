@@ -36,10 +36,13 @@ export default class StudentAcademicDetailsForm extends Component {
 
   handleChange = (event) => {
     const {name, value} = event.target;
+    console.log('name is ', name)
     if (name === "standard") {
       this.props.onStandardChange(value);
     } else if (name === 'hasPaidFees') {
-      this.setState({hasPaidFees: !this.state.hasPaidFees})
+      this.setState({hasPaidFees: !this.state.hasPaidFees}, () => {
+        this.props.onChange({name: 'hasPaidFees', value: this.state.hasPaidFees})
+      })
     }
     console.log('name: ', name, ' value : ', value);
     this.props.onChange({name, value});
@@ -95,6 +98,7 @@ export default class StudentAcademicDetailsForm extends Component {
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
+                required
                 label="Admission Date"
                 value={values['admissionDate'] ? values['admissionDate'] : ''}
                 onChange={(date) => this.handleDateChange(date)}
@@ -135,13 +139,28 @@ export default class StudentAcademicDetailsForm extends Component {
             </FormControl>
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
-            Paid Full Fees: <Switch
+            <span style={{marginTop: 10}}>Paid Full Fees: </span>
+            <Switch
               checked={this.state.hasPaidFees}
               onChange={(e) => this.handleChange(e)}
               value={values['hasPaidFees'] ? values['hasPaidFees'] : ''}
               color="primary"
               name={'hasPaidFees'}
               label={'Paid Full Fees'}
+            />
+          </Grid>
+          <Grid style={this.gridStyle} container item xs={6} spacing={8}>
+            <TextField
+              autoFocus
+              disabled
+              style={this.textFieldStyle}
+              id="fees"
+              value={values['fees'] ? values['fees'] : ''}
+              name="fees"
+              label="Fees"
+              onChange={(e) => this.handleChange(e)}
+              autoComplete="fees"
+              error={errors['fees'] ? errors['fees'] : false}
             />
           </Grid>
           <Grid style={this.gridStyle} container item xs={12} spacing={8}>

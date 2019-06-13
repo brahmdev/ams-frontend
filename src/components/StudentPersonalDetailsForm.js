@@ -47,38 +47,38 @@ export default class StudentPersonalDetailsForm extends Component {
               required
               autoFocus
               style={this.textFieldStyle}
-              id="firstName"
-              value={values['firstName'] ? values['firstName'] : ''}
-              name="firstName"
+              id="firstname"
+              value={values['firstname'] ? values['firstname'] : ''}
+              name="firstname"
               label="First name"
               onChange={(e) => this.handleChange(e)}
               autoComplete="fname"
-              error={errors['firstName'] ? errors['firstName'] : false}
+              error={errors['firstname'] ? errors['firstname'] : false}
             />
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <TextField
               required
               style={this.textFieldStyle}
-              id="lastName"
-              value={values['lastName'] ? values['lastName'] : ''}
-              name="lastName"
+              id="lastname"
+              value={values['lastname'] ? values['lastname'] : ''}
+              name="lastname"
               label="Last name"
               onChange={(e) => this.handleChange(e)}
               autoComplete="lname"
-              error={errors['lastName'] ? errors['lastName'] : false}
+              error={errors['lastname'] ? errors['lastname'] : false}
             />
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <TextField
               required
               style={this.textFieldStyle}
-              id="userName"
-              name="userName"
-              value={values['userName'] ? values['userName'] : ''}
+              id="username"
+              name="username"
+              value={values['username'] ? values['username'] : ''}
               label="UserName"
               onChange={(e) => this.handleChange(e)}
-              error={errors['userName'] ? errors['userName'] : false}
+              error={errors['username'] ? errors['username'] : false}
             />
           </Grid>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>

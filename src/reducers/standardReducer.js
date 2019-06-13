@@ -17,6 +17,15 @@ export default function (state = initialState, action) {
         ...state,
         standardList
       };
+    case standardActionTypes.API_GET_STANDARD + apiExecutionState.FINISHED:
+      const standard = JSON.parse(action.response);
+      return {
+        ...state,
+        id: standard.id,
+        code: standard.code,
+        name: standard.name,
+        fees: standard.fees
+      };
     case standardActionTypes.API_GET_ALL_STANDARDS_LOOKUP + apiExecutionState.FINISHED:
       const standardLookUp = JSON.parse(action.response);
       return {

@@ -8,10 +8,11 @@ import {withStyles} from "@material-ui/core";
 import connect from "react-redux/es/connect/connect";
 import StudentPersonalDetailsForm from "../components/StudentPersonalDetailsForm";
 import ParendDetailsForm from "../components/ParendDetailsForm";
-import StudentAcademicDetails from "./StudentAcademicDetails";
 import StudentAcademicDetailsForm from "../components/StudentAcademicDetailsForm";
 import {getInstituteId} from "../utils/userInfo";
-import { getAllStandardLookUpForStudent, getAllBatchOfStandardLookUp } from "../actions/studentActions";
+import { getAllStandardLookUpForStudent, getAllBatchOfStandardLookUp, createUser } from "../actions/studentActions";
+import { getStandard } from "../actions/standardActions";
+import { getBranchId } from "../utils/userInfo";
 
 const styles = theme => ({
 
@@ -46,11 +47,12 @@ class Student extends Component {
 
   isStudentPersonalDetailsFormInValid = false;
   isParentDetailsFormInValid = false;
+  isStudentAcademicDetailsFormInValid = false;
 
   studentPersonalDetailsRequiredFields = [
-    'firstName',
-    'lastName',
-    'userName',
+    'firstname',
+    'lastname',
+    'username',
     'password',
     'mobile',
     'gender',
@@ -68,9 +70,9 @@ class Student extends Component {
   };
 
   parentDetailsRequiredFields = [
-    'firstName',
-    'lastName',
-    'userName',
+    'firstname',
+    'lastname',
+    'username',
     'password',
     'mobile',
     'gender',
@@ -87,7 +89,8 @@ class Student extends Component {
   ];
 
   studentAcademicDetailsFieldsValue = {
-    admissionDate: new Date()
+    admissionDate: new Date(),
+    hasPaidFees: false
   };
 
   componentDidMount() {
@@ -96,14 +99,14 @@ class Student extends Component {
   }
 
   makeUserName = (length) => {
-    var name = this.studentPersonalDetailsFieldsValue.firstName + this.studentPersonalDetailsFieldsValue.lastName;
-    var userName = '';
+    var name = this.studentPersonalDetailsFieldsValue.firstname + this.studentPersonalDetailsFieldsValue.lastname;
+    var username = '';
     var characters = name;
     var charactersLength = characters.length;
     for (var i = 0; i < length; i++) {
-      userName += characters.charAt(Math.floor(Math.random() * charactersLength));
+      username += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    return userName;
+    return username;
   };
 
   isValidDate(d) {
@@ -118,12 +121,12 @@ class Student extends Component {
       studentPersonalDetailsErrors[name] = false;
       this.setState({studentPersonalDetailsErrors, isStudentPersonalDetailsFormValid: false});
     }
-    if (this.studentPersonalDetailsFieldsValue.userName && this.studentPersonalDetailsFieldsValue.userName.trim().length > 0) {
+    if (this.studentPersonalDetailsFieldsValue.username && this.studentPersonalDetailsFieldsValue.username.trim().length > 0) {
       return;
-    } else if (this.studentPersonalDetailsFieldsValue.firstName && this.studentPersonalDetailsFieldsValue.lastName && this.studentPersonalDetailsFieldsValue.firstName.trim().length > 0 && this.studentPersonalDetailsFieldsValue.lastName.trim().length > 0) {
+    } else if (this.studentPersonalDetailsFieldsValue.firstname && this.studentPersonalDetailsFieldsValue.lastname && this.studentPersonalDetailsFieldsValue.firstname.trim().length > 0 && this.studentPersonalDetailsFieldsValue.lastname.trim().length > 0) {
       const studentPersonalDetailsFieldsValue = this.studentPersonalDetailsFieldsValue;
-      studentPersonalDetailsFieldsValue.userName = this.makeUserName(6);
-      studentPersonalDetailsErrors.userName = false;
+      studentPersonalDetailsFieldsValue.username = this.makeUserName(6);
+      studentPersonalDetailsErrors.username = false;
       this.setState({studentPersonalDetailsErrors});
     }
   };
@@ -136,14 +139,19 @@ class Student extends Component {
       parentDetailsErrors[name] = false;
       this.setState({parentDetailsErrors, isParentDetailsFormInValid: false});
     }
-    if (this.parentDetailsFieldsValue.userName && this.parentDetailsFieldsValue.userName.trim().length > 0) {
+    if (this.parentDetailsFieldsValue.username && this.parentDetailsFieldsValue.username.trim().length > 0) {
       return;
-    } else if (this.parentDetailsFieldsValue.firstName && this.parentDetailsFieldsValue.lastName && this.parentDetailsFieldsValue.firstName.trim().length > 0 && this.parentDetailsFieldsValue.lastName.trim().length > 0) {
+    } else if (this.parentDetailsFieldsValue.firstname && this.parentDetailsFieldsValue.lastname && this.parentDetailsFieldsValue.firstname.trim().length > 0 && this.parentDetailsFieldsValue.lastname.trim().length > 0) {
       const parentDetailsRequiredFields = this.parentDetailsFieldsValue;
-      parentDetailsRequiredFields.userName = this.makeUserName(6);
-      parentDetailsErrors.userName = false;
+      parentDetailsRequiredFields.username = this.makeUserName(6);
+      parentDetailsErrors.username = false;
       this.setState({parentDetailsErrors});
     }
+  };
+
+  handleStandardChange(standardId) {
+    this.props.getAllBatchOfStandardLookUp(standardId);
+    this.props.getStandard(standardId);
   };
 
   onChangeStudentAcademicDetailsFormField = (data) => {
@@ -160,13 +168,7 @@ class Student extends Component {
     return ['Personal Details', 'Parent Details', 'Academic Details'];
   };
 
-  handleStandardChange(standardId) {
-    this.props.getAllBatchOfStandardLookUp(standardId);
-  }
-
   getStepContent = (step) => {
-    const { student: {standardLookUp}} = this.props;
-    console.log('standardLookup', standardLookUp)
     switch (step) {
       case 0:
         return <StudentPersonalDetailsForm onChange={this.onChangeStudentPersonalDetailsFormField}
@@ -198,9 +200,8 @@ class Student extends Component {
   };
 
   handleNext = () => {
-    const {studentPersonalDetailsErrors, parentDetailsErrors, activeStep} = this.state;
-    console.log(this.studentPersonalDetailsFieldsValue)
-    /*if (activeStep === 0) {
+    const {studentPersonalDetailsErrors, parentDetailsErrors, studentAcademicDetailsErrors, activeStep} = this.state;
+    if (activeStep === 0) {
       this.studentPersonalDetailsRequiredFields.forEach(field => {
         if (!this.studentPersonalDetailsFieldsValue[field]) {
           studentPersonalDetailsErrors[field] = true;
@@ -237,11 +238,68 @@ class Student extends Component {
       this.isParentDetailsFormInValid = false;
     } else if (activeStep === 2) {
 
-    }*/
+      this.studentAcademicDetailsRequiredFields.forEach(field => {
+        if (!this.studentAcademicDetailsFieldsValue[field]) {
+          studentAcademicDetailsErrors[field] = true;
+          this.setState({studentAcademicDetailsErrors});
+        }
+      });
+
+      for (var errorKey in studentAcademicDetailsErrors) {
+        if (studentAcademicDetailsErrors.hasOwnProperty(errorKey)) {
+          if (studentAcademicDetailsErrors[errorKey] === true) {
+            this.isStudentAcademicDetailsFormInValid = true;
+            return;
+          }
+        }
+      }
+      this.isStudentAcademicDetailsFormInValid = false;
+    }
+    console.log('studentPersonalDetailsFieldsValue', this.studentPersonalDetailsFieldsValue)
+    console.log('parentDetailsFieldsValue ',this.parentDetailsFieldsValue)
+    console.log('studentAcademicDetailsFieldsValue ', this.studentAcademicDetailsFieldsValue)
     this.setState({
       activeStep: this.state.activeStep + 1
     })
+    this.createUser();
   };
+
+  createUser() {
+    const branchId = getBranchId();
+    const branch =  {
+      "id": branchId
+    };
+    let studentUser = this.studentPersonalDetailsFieldsValue;
+    studentUser.branch = branch;
+    studentUser.studentDetailses = [this.studentAcademicDetailsFieldsValue];
+    const authoritiesesStudent = {
+      username: studentUser.username,
+      authority: 'ROLE_STUDENT'
+    };
+    studentUser.created = new Date();
+    studentUser.authoritieses = [authoritiesesStudent];
+
+    this.props.createUser(studentUser);
+
+    let parentUser = this.parentDetailsFieldsValue;
+    parentUser.branch = branch;
+    parentUser.address = studentUser.address;
+    parentUser.created = new Date();
+
+    let parentDetails = {};
+    parentDetails.relation = this.parentDetailsFieldsValue.relation;
+    parentDetails.occupation = this.parentDetailsFieldsValue.occupation;
+    parentDetails.education = this.parentDetailsFieldsValue.education;
+    parentDetails.income = this.parentDetailsFieldsValue.income;
+    parentUser.parentDetailses = [parentDetails];
+
+    const authoritiesesParent = {
+      username: studentUser.username,
+      authority: 'ROLE_PARENT'
+    };
+    parentUser.authoritieses = [authoritiesesParent];
+    this.props.createUser(parentUser);
+  }
 
   handleBack = () => {
     this.setState({
@@ -249,27 +307,19 @@ class Student extends Component {
     })
   };
 
-  handleReset = () => {
-    this.setState({activeStep: 0});
-  };
-
   render() {
-    const {classes} = this.props;
+    const {classes, standard} = this.props;
+    if (standard.fees !== '' ) {
+      this.studentAcademicDetailsFieldsValue.fees = standard.fees;
+    }
     const {activeStep, steps} = this.state;
-    console.log('in parent render')
     return (
       <div className={classes.root}>
         <Stepper className={classes.root} activeStep={this.state.activeStep}>
           {this.state.steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
-            /*if (this.isStepOptional(index)) {
-              labelProps.optional = (
-                <Typography variant="caption" color="error">
-                  Alert message
-                </Typography>
-              );
-            }*/
+
             if (this.isStepFailed(index)) {
               labelProps.error = true;
             }
@@ -285,11 +335,8 @@ class Student extends Component {
           {this.state.activeStep === this.state.steps.length ? (
             <div>
               <Typography className={classes.instructions}>
-                All steps completed - you&apos;re finished
+                All steps completed - Student will be created soon. Contact Admin if not created.
               </Typography>
-              <Button onClick={this.handleReset} className={classes.button}>
-                Reset
-              </Button>
             </div>
           ) : (
             <div>
@@ -322,8 +369,10 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
+  getStandard,
   getAllStandardLookUpForStudent,
-  getAllBatchOfStandardLookUp
+  getAllBatchOfStandardLookUp,
+  createUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Student));
