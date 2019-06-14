@@ -98,6 +98,30 @@ class Student extends Component {
     this.props.getAllStandardLookUpForStudent(instituteId);
   }
 
+  handleReset = () => {
+    this.setState({
+      activeStep: 0,
+      studentPersonalDetailsErrors: [],
+      parentDetailsErrors: [],
+      studentAcademicDetailsErrors: []
+    });
+
+    this.studentPersonalDetailsFieldsValue = {
+      dob: new Date(),
+      state: 'Maharashtra',
+      country: 'India'
+    };
+    this.parentDetailsFieldsValue = {};
+    this.studentAcademicDetailsFieldsValue = {
+      admissionDate: new Date(),
+      hasPaidFees: false
+    };
+
+    this.isStudentPersonalDetailsFormInValid = false;
+    this.isParentDetailsFormInValid = false;
+    this.isStudentAcademicDetailsFormInValid = false;
+  };
+
   makeUserName = (length) => {
     var name = this.studentPersonalDetailsFieldsValue.firstname + this.studentPersonalDetailsFieldsValue.lastname;
     var username = '';
@@ -254,14 +278,13 @@ class Student extends Component {
         }
       }
       this.isStudentAcademicDetailsFormInValid = false;
+
+      this.createUser();
+
     }
-    console.log('studentPersonalDetailsFieldsValue', this.studentPersonalDetailsFieldsValue)
-    console.log('parentDetailsFieldsValue ',this.parentDetailsFieldsValue)
-    console.log('studentAcademicDetailsFieldsValue ', this.studentAcademicDetailsFieldsValue)
     this.setState({
       activeStep: this.state.activeStep + 1
     })
-    this.createUser();
   };
 
   createUser() {
@@ -271,6 +294,17 @@ class Student extends Component {
     };
     let studentUser = this.studentPersonalDetailsFieldsValue;
     studentUser.branch = branch;
+    if (this.studentAcademicDetailsFieldsValue.hasPaidFees === true) {
+      this.studentAcademicDetailsFieldsValue.hasPaidFees = "Y";
+    } else {
+      this.studentAcademicDetailsFieldsValue.hasPaidFees = "N";
+    }
+    const batchId = this.studentAcademicDetailsFieldsValue.batch;
+    delete this.studentAcademicDetailsFieldsValue['batch'];
+    const batch = {
+      "id": batchId
+    };
+    this.studentAcademicDetailsFieldsValue.batch = batch;
     studentUser.studentDetailses = [this.studentAcademicDetailsFieldsValue];
     const authoritiesesStudent = {
       username: studentUser.username,
@@ -284,6 +318,10 @@ class Student extends Component {
     let parentUser = this.parentDetailsFieldsValue;
     parentUser.branch = branch;
     parentUser.address = studentUser.address;
+    parentUser.city = studentUser.city;
+    parentUser.state = studentUser.state;
+    parentUser.zip = studentUser.zip;
+    parentUser.country = studentUser.country;
     parentUser.created = new Date();
 
     let parentDetails = {};
@@ -299,6 +337,10 @@ class Student extends Component {
     };
     parentUser.authoritieses = [authoritiesesParent];
     this.props.createUser(parentUser);
+
+    console.log('student object to create ', studentUser)
+    console.log('parent object to create ', parentUser)
+
   }
 
   handleBack = () => {
@@ -337,6 +379,9 @@ class Student extends Component {
               <Typography className={classes.instructions}>
                 All steps completed - Student will be created soon. Contact Admin if not created.
               </Typography>
+              <Button onClick={this.handleReset} className={classes.button}>
+                Add New ?
+              </Button>
             </div>
           ) : (
             <div>
