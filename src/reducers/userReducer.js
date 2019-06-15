@@ -65,9 +65,12 @@ export default function (state = initialState, action) {
         authorities
       };
     case userActionTypes.API_USER_LOGIN + apiExecutionState.ERROR:
-      console.log(action)
+    case userActionTypes.API_GET_USER_AUTHORITIES + apiExecutionState.ERROR:
+      localStorage.clear();
       return {
-        ...state
+        ...state,
+        loginError: true,
+        isUserLoggedIn: false
       };
     default:
       return state;

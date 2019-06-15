@@ -35,8 +35,8 @@ class SignIn extends Component {
   };
 
   render() {
-    const {isLoggedIn, authorities} = this.props;
-    if (isLoggedIn && authorities.length > 0) {
+    const {isLoggedIn, authorities, loginError} = this.props;
+    if (isLoggedIn && authorities.length > 0 && !loginError) {
       return <Redirect to='/'/>;
     } else {
       return <SignInPage handleSubmit={(event) => this.handleSubmit(event)} onUserNameChange={this.onUserNameChange}
@@ -46,8 +46,8 @@ class SignIn extends Component {
 }
 
 function mapStateToProps(state) {
-  const { isLoggedIn, authorities } = state.user;
-  return { isLoggedIn, authorities };
+  const { isLoggedIn, authorities, loginError } = state.user;
+  return { isLoggedIn, authorities, loginError };
 }
 
 const mapDispatchToProps = (dispatch) => {

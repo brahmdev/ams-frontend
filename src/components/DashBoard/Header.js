@@ -147,8 +147,8 @@ class Header extends React.Component {
   };
 
   render() {
-    const {classes, isLoggedIn, institute} = this.props;
-    if (isLoggedIn) {
+    const {classes, isLoggedIn, institute, loginError, authorities} = this.props;
+    if (isLoggedIn && authorities.length > 0 && !loginError) {
       return (
         <div className={classes.root}>
           <CssBaseline/>
@@ -264,7 +264,9 @@ Header.propTypes = {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.user.isLoggedIn,
-    institute: state.user.institute
+    institute: state.user.institute,
+    loginError: state.user.loginError,
+    authorities: state.user.authorities
   };
 }
 
