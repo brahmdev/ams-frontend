@@ -8,6 +8,7 @@ export const apiExecutionState = {
 
 export const userActionTypes = {
   API_USER_LOGIN: 'API_USER_LOGIN',
+  API_GET_USER_AUTHORITIES: 'API_GET_USER_AUTHORITIES'
 };
 
 export const branchActionTypes = {

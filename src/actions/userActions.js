@@ -10,5 +10,20 @@ export function login(username) {
         method: 'GET'
       }
     },
+    onSuccess: getAuthorities
+  };
+}
+
+export function getAuthorities(user) {
+  const username = JSON.parse(user).username;
+  return {
+    type: userActionTypes.API_GET_USER_AUTHORITIES,
+    apiType: CALL_API,
+    callAPI: {
+      apiPathWithParam: `/admin/users/${username}/authorities`,
+      options: {
+        method: 'GET'
+      }
+    },
   };
 }

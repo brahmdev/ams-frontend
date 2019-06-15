@@ -17,7 +17,8 @@ const initialState = {
   loginErrorMessage: '',
   isSocketConnected: false,
   institute: '',
-  branch: ''
+  branch: '',
+  authorities: []
 };
 
 export default function (state = initialState, action) {
@@ -32,8 +33,23 @@ export default function (state = initialState, action) {
       const branchId = user.branch.id;
       setBranchId(branchId);
 
-      const authorities = user.authoritieses;
+      setLoggeddIn();
+      return {
+        ...state,
+        userName: user.userName,
+        admin: false,
+        isLoading: false,
+        isLoggedIn: true,
+        loginError: false,
+        institute: user.branch.institute,
+        branch: user.branch
+      };
+    case userActionTypes.API_GET_USER_AUTHORITIES + apiExecutionState.FINISHED:
+      const authorities = JSON.parse(action.response);
+      console.log('authorities: ', authorities);
+
       let isAdmin = false;
+
       for (const authObj of authorities) {
         if (authObj.authority === 'ROLE_ADMIN') {
           isAdmin = true;
@@ -43,13 +59,15 @@ export default function (state = initialState, action) {
       setLoggeddIn();
       return {
         ...state,
-        userName: user.userName,
         admin: isAdmin,
         isLoading: false,
-        isLoggedIn: true,
         loginError: false,
-        institute: user.branch.institute,
-        branch: user.branch
+        authorities
+      };
+    case userActionTypes.API_USER_LOGIN + apiExecutionState.ERROR:
+      console.log(action)
+      return {
+        ...state
       };
     default:
       return state;

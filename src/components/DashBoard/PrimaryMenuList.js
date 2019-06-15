@@ -8,7 +8,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import School from '@material-ui/icons/School';
+import PersonAdd from '@material-ui/icons/PersonAdd';
+import GroupAdd from '@material-ui/icons/GroupAdd';
+import LocationOn from '@material-ui/icons/LocationOn';
 import PeopleIcon from '@material-ui/icons/People';
+import ChromeReaderMode from '@material-ui/icons/ChromeReaderMode';
+import CardMembership from '@material-ui/icons/CardMembership';
+import Subject from '@material-ui/icons/Subject';
+import Code from '@material-ui/icons/Code';
+import EventSeat from '@material-ui/icons/EventSeat';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -74,10 +82,26 @@ class PrimaryMenuList extends React.Component {
   renderIcon = (iconName) => {
     if (iconName === 'dashBoard') {
       return <DashboardIcon/>
-    } else if (['branch', 'board', 'standard', 'subject', 'chapter', 'batch', 'student'].includes(iconName)) {
-      return <ViewHeadline/>
+    } else if (iconName === 'branch') {
+      return <LocationOn/>;
+    } else if (iconName === 'board') {
+      return <ChromeReaderMode/>;
+    } else if (iconName === 'standard') {
+      return <CardMembership/>;
+    } else if (iconName === 'subject') {
+      return <Subject/>;
+    } else if (iconName === 'chapter') {
+      return <Code/>;
+    } else if (iconName === 'batch') {
+      return <EventSeat/>;
     } else if (iconName === 'timetable') {
       return <AvTimer/>
+    }  else if (['studentList'].includes(iconName)) {
+      return <ViewHeadline/>
+    } else if (['student', 'teacher'].includes(iconName)) {
+      return <PersonAdd/>
+    } else if (iconName === 'nonTeachingStaff') {
+      return <GroupAdd/>
     }
   };
 
@@ -153,27 +177,22 @@ class PrimaryMenuList extends React.Component {
         </ListItem>
         <Collapse in={this.state.people} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {this.renderListItem('/student', classes, 'student', 'Student', true)}
+            {this.renderListItem('/student', classes, 'student', 'Add Student', true)}
           </List>
         </Collapse>
         <Collapse in={this.state.people} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <ViewHeadline/>
-              </ListItemIcon>
-              <ListItemText inset primary="Teacher"/>
-            </ListItem>
+            {this.renderListItem('/studentList', classes, 'studentList', 'Student List', true)}
           </List>
         </Collapse>
         <Collapse in={this.state.people} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItem button className={classes.nested}>
-              <ListItemIcon>
-                <ViewHeadline/>
-              </ListItemIcon>
-              <ListItemText inset primary="Non-Teaching Staff"/>
-            </ListItem>
+            {this.renderListItem('/teacher', classes, 'teacher', 'Add Teacher', true)}
+          </List>
+        </Collapse>
+        <Collapse in={this.state.people} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {this.renderListItem('/nonTeachingStaff', classes, 'nonTeachingStaff', 'Add Non-teaching Staff', true)}
           </List>
         </Collapse>
 

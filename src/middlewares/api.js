@@ -2,6 +2,12 @@ import { CALL_API } from '../actions/actionTypes';
 import { getAMSUser} from '../utils/userInfo';
 import { actionWith } from '../utils/index';
 import { apiExecutionState } from "../actions/actionTypes";
+import {
+  executeNextFailureHandlers,
+  executeNextSuccessHandlers,
+  notifyReducersWithFailure,
+  notifyReducersWithSuccess
+} from '../utils/middlewareHelper';
 
 export default (store) => (next) => (action) => {
   if (!action) {
@@ -18,12 +24,8 @@ export default (store) => (next) => (action) => {
   );
 
   makeRequest(store, action, next).catch((error) => {
-    next(
-      actionWith(action, {
-        type: action.type + apiExecutionState.ERROR,
-        error
-      })
-    );
+    notifyReducersWithFailure(action, next, error);
+    executeNextFailureHandlers(action, store, error);
   });
 };
 
@@ -32,19 +34,11 @@ async function makeRequest(store, action, next) {
 
   response.text = await response.text();
   if (response.ok) {
-    next(
-      actionWith(action, {
-        type: action.type + apiExecutionState.FINISHED,
-        response: response.text
-      })
-    );
+    notifyReducersWithSuccess(action, next, response.text);
+    executeNextSuccessHandlers(action, store, response.text);
   } else {
-    next(
-      actionWith(action, {
-        type: action.type + apiExecutionState.ERROR,
-        error: response
-      })
-    );
+    notifyReducersWithSuccess(action, next, response.text);
+    executeNextSuccessHandlers(action, store, response.text);
   }
 }
 

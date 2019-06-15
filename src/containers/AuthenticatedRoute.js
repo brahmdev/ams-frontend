@@ -5,22 +5,20 @@ import {Redirect, Route} from 'react-router-dom';
 
 class AuthenticatedRoute extends Component {
     render() {
-        const {exact, path, component: ComponentToRender, isLoggedIn} = this.props;
-
+        const {exact, path, component: ComponentToRender, isLoggedIn, authorities} = this.props;
         return (
             <Route
                 exact={exact}
                 path={path}
-                render={() => (isLoggedIn ? <ComponentToRender/> : <Redirect to='/login'/>)}
+                render={() => ((isLoggedIn && authorities.length > 0) ? <ComponentToRender/> : <Redirect to='/login'/>)}
             />
         );
     }
 }
 
 function mapStateToProps(state) {
-    return {
-        isLoggedIn: state.user.isLoggedIn
-    };
+    const { isLoggedIn, authorities } = state.user;
+    return { isLoggedIn, authorities };
 }
 
 export default connect(mapStateToProps)(AuthenticatedRoute);
