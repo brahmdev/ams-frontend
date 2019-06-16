@@ -4,7 +4,7 @@ import {withStyles} from "@material-ui/core";
 import { getAllStandards, createStandard, deleteStandard, updateStandard } from "../actions/standardActions";
 import { getAllBoardsLookUp } from "../actions/boardActions";
 import connect from "react-redux/es/connect/connect";
-import { getInstituteId } from "../utils/userInfo";
+import {getBranchId, getInstituteId} from "../utils/userInfo";
 
 const styles = theme => ({
 
@@ -36,9 +36,9 @@ class Standard extends Component {
   }
 
   componentDidMount() {
-    const instituteId = getInstituteId();
-    this.props.getAllBoardsLookUp(instituteId);
-    this.props.getAllStandards(instituteId);
+    const branchId = getBranchId();
+    this.props.getAllBoardsLookUp(branchId);
+    this.props.getAllStandards(branchId);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

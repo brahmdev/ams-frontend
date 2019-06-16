@@ -177,12 +177,12 @@ class PrimaryMenuList extends React.Component {
         </ListItem>
         <Collapse in={this.state.people} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {this.renderListItem('/student', classes, 'student', 'Add Student', true)}
+            {this.renderListItem('/studentWizard', classes, 'student', 'Add Student', true)}
           </List>
         </Collapse>
         <Collapse in={this.state.people} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {this.renderListItem('/studentList', classes, 'studentList', 'Student List', true)}
+            {this.renderListItem('/studentList', classes, 'studentList', 'Students', true)}
           </List>
         </Collapse>
         <Collapse in={this.state.people} timeout="auto" unmountOnExit>

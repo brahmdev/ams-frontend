@@ -4,7 +4,7 @@ import {withStyles} from "@material-ui/core";
 import { getAllStandardLookUp } from "../actions/standardActions";
 import { getAllSubjects, createSubject, deleteSubject, updateSubject } from "../actions/subjectActions";
 import connect from "react-redux/es/connect/connect";
-import { getInstituteId } from "../utils/userInfo";
+import {getBranchId, getInstituteId} from "../utils/userInfo";
 
 const styles = theme => ({
 
@@ -32,9 +32,9 @@ class Subject extends Component {
   }
 
   componentDidMount() {
-    const instituteId = getInstituteId();
-    this.props.getAllStandardLookUp(instituteId);
-    this.props.getAllSubjects(instituteId);
+    const branchId = getBranchId();
+    this.props.getAllStandardLookUp(branchId);
+    this.props.getAllSubjects(branchId);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

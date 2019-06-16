@@ -12,10 +12,11 @@ import Standard from "./containers/Standard";
 import Subject from "./containers/Subject";
 import Chapter from "./containers/Chapter";
 import Batch from "./containers/Batch";
-import Student from "./containers/Student";
-import Footer from "./components/DashBoard/Footer";
+import StudentWizard from "./containers/StudentWizard";
 import TimeTable from "./containers/TimeTable/TimeTable";
 import Branch from "./containers/Branch";
+import Student from "./containers/Student";
+import StudentDetails from "./components/StudentDetails";
 
 function App() {
   return (
@@ -36,7 +37,9 @@ function App() {
                   <AuthenticatedRoute exact path='/subject' component={Subject}/>
                   <AuthenticatedRoute exact path='/chapter' component={Chapter}/>
                   <AuthenticatedRoute exact path='/batch' component={Batch}/>
-                  <AuthenticatedRoute exact path='/student' component={Student}/>
+                  <AuthenticatedRoute exact path='/studentWizard' component={StudentWizard}/>
+                  <AuthenticatedRoute exact path='/studentList' component={Student}/>
+                  <AuthenticatedRoute exact path='/studentDetails' component={StudentDetails}/>
                   <AuthenticatedRoute exact path='/timetable' component={TimeTable}/>
                 </Switch>
               </div>

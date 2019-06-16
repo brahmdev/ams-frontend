@@ -4,7 +4,7 @@ import {withStyles} from "@material-ui/core";
 import { getAllStandardLookUp } from "../actions/standardActions";
 import { getAllBatches, createBatch, updateBatch, deleteBatch } from "../actions/batchActions";
 import connect from "react-redux/es/connect/connect";
-import { getInstituteId } from "../utils/userInfo";
+import {getBranchId, getInstituteId} from "../utils/userInfo";
 
 const styles = theme => ({
 
@@ -36,9 +36,9 @@ class Batch extends Component {
   }
 
   componentDidMount() {
-    const instituteId = getInstituteId();
-    this.props.getAllStandardLookUp(instituteId);
-    this.props.getAllBatches(instituteId);
+    const branchId = getBranchId();
+    this.props.getAllStandardLookUp(branchId);
+    this.props.getAllBatches(branchId);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

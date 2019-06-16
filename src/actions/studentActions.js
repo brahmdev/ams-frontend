@@ -1,11 +1,11 @@
 import {subjectActionTypes, studentAdmissionActionTypes, CALL_API} from './actionTypes';
 
-export function getAllStudents(instituteId) {
+export function getAllStudents(branchId) {
   return {
-    type: subjectActionTypes.API_GET_ALL_SUBJECTS,
+    type: studentAdmissionActionTypes.API_GET_ALL_STUDENTS,
     apiType: CALL_API,
     callAPI: {
-      apiPathWithParam: `/admin/student/${instituteId}`,
+      apiPathWithParam: `/admin/users/${branchId}/ROLE_STUDENT`,
       options: {
         method: 'GET'
       }

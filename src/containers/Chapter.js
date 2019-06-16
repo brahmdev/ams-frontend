@@ -4,7 +4,7 @@ import {withStyles} from "@material-ui/core";
 import { getAllChapters, createChapter, updateChapter, deleteChapter } from "../actions/chapterActions";
 import { getAllSubjectLookUp } from "../actions/subjectActions";
 import connect from "react-redux/es/connect/connect";
-import { getInstituteId } from "../utils/userInfo";
+import {getBranchId, getInstituteId} from "../utils/userInfo";
 
 const styles = theme => ({
 
@@ -33,9 +33,9 @@ class Standard extends Component {
   }
 
   componentDidMount() {
-    const instituteId = getInstituteId();
-    this.props.getAllSubjectLookUp(instituteId);
-    this.props.getAllChapters(instituteId);
+    const branchId = getBranchId();
+    this.props.getAllSubjectLookUp(branchId);
+    this.props.getAllChapters(branchId);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
