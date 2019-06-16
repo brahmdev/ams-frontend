@@ -18,6 +18,10 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 import Grid from '@material-ui/core/Grid';
+import StudentPersonalDetailsEditForm from "./StudentPersonalDetailsEditForm";
+import {getAllStandardLookUpForStudent, getAllBatchOfStandardLookUp, saveOrUpdateUser} from "../actions/studentActions";
+import connect from "react-redux/es/connect/connect";
+import {getStandard} from "../actions/standardActions";
 
 function TabContainer(props) {
   return (
@@ -35,7 +39,7 @@ const styles = theme => ({
     root: {
       flexGrow: 1,
       width: '100%',
-      marginTop: '5%'
+      marginTop: '80px'
     },
     details: {
       backgroundColor: theme.palette.background.paper,
@@ -57,7 +61,7 @@ const styles = theme => ({
       },
     },
     master: {
-      height: '170px',
+      height: '150px',
     },
     studentInfo: {
       display: 'flex',
@@ -101,14 +105,18 @@ const styles = theme => ({
       position: 'absolute',
       left: '41%',
       marginLeft: '-3px',
-      top: '17%',
-    }
+      top: '10%',
+    },
+
   })
 ;
 
 class StudentDetails extends React.Component {
   state = {
     value: 0,
+    studentPersonalDetailsErrors: [],
+    parentDetailsErrors: [],
+    studentAcademicDetailsErrors: []
   };
 
   handleChange = (event, value) => {
@@ -117,6 +125,24 @@ class StudentDetails extends React.Component {
 
   goBack = (event) => {
     this.props.history.goBack();
+  };
+
+  onChangeStudentPersonalDetailsFormField = (data) => {
+    const {location: {state: {userDetails}}} = this.props;
+
+    const {name, value} = data;
+    const {studentPersonalDetailsErrors} = this.state;
+    userDetails[name] = value;
+    if ((value && value.length > 0) || (name === 'dob' && this.isValidDate(value))) {
+      studentPersonalDetailsErrors[name] = false;
+      this.setState({studentPersonalDetailsErrors});
+    }
+  };
+
+  savePersonalDetails = () => {
+    const {location: {state: {userDetails}}} = this.props;
+    console.log('about to save ', userDetails);
+    this.props.saveOrUpdateUser(userDetails);
   };
 
   render() {
@@ -139,7 +165,8 @@ class StudentDetails extends React.Component {
           </div>
           <div className={classes.studentInfo}>
             <Grid container justify="flex-start" alignItems="center" className={classes.studentBasicInfo}>
-              <Avatar className={classNames(classes.orangeAvatar, classes.bigAvatar)}>N</Avatar>
+              <Avatar
+                className={classNames(classes.orangeAvatar, classes.bigAvatar)}>{`${userDetails.firstname.charAt(0)} ${userDetails.lastname.charAt(0)}`}</Avatar>
               <div className={classes.studentData}>
                 <p
                   className={classNames(classes.paragraph, classes.heading)}>{userDetails.firstname} {userDetails.lastname}</p>
@@ -171,7 +198,10 @@ class StudentDetails extends React.Component {
               <Tab icon={<Equalizer/>} label="Reports"/>
             </Tabs>
           </Paper>
-          {value === 0 && <TabContainer>Item One</TabContainer>}
+          {value === 0 && <TabContainer><StudentPersonalDetailsEditForm values={userDetails}
+                                                                        savePersonalDetails={this.savePersonalDetails}
+                                                                        onChange={this.onChangeStudentPersonalDetailsFormField}
+                                                                        errors={this.state.studentPersonalDetailsErrors}/></TabContainer>}
           {value === 1 && <TabContainer>Item Two</TabContainer>}
           {value === 2 && <TabContainer>Item Three</TabContainer>}
           {value === 3 && <TabContainer>Item Four</TabContainer>}
@@ -186,4 +216,14 @@ StudentDetails.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(StudentDetails));
+
+function mapStateToProps(state) {
+  const {student} = state;
+  return {student};
+}
+
+const mapDispatchToProps = {
+  saveOrUpdateUser
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(StudentDetails)));

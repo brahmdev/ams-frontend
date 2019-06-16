@@ -39,7 +39,7 @@ export function getAllBatchOfStandardLookUp(standardId) {
   };
 }
 
-export function createUser(user) {
+export function saveOrUpdateUser(user) {
   return {
     type: subjectActionTypes.API_CREATE_SUBJECT,
     apiType: CALL_API,

@@ -10,7 +10,7 @@ import StudentPersonalDetailsForm from "../components/StudentPersonalDetailsForm
 import ParendDetailsForm from "../components/ParendDetailsForm";
 import StudentAcademicDetailsForm from "../components/StudentAcademicDetailsForm";
 import {getInstituteId} from "../utils/userInfo";
-import { getAllStandardLookUpForStudent, getAllBatchOfStandardLookUp, createUser } from "../actions/studentActions";
+import { getAllStandardLookUpForStudent, getAllBatchOfStandardLookUp, saveOrUpdateUser } from "../actions/studentActions";
 import { getStandard } from "../actions/standardActions";
 import { getBranchId } from "../utils/userInfo";
 
@@ -417,7 +417,7 @@ const mapDispatchToProps = {
   getStandard,
   getAllStandardLookUpForStudent,
   getAllBatchOfStandardLookUp,
-  createUser
+  createUser: saveOrUpdateUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(StudentWizard));
