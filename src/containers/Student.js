@@ -5,14 +5,7 @@ import MaterialTable from 'material-table';
 import {withStyles} from "@material-ui/core";
 import {getAllStudents} from "../actions/studentActions";
 import connect from "react-redux/es/connect/connect";
-import {getBranchId, getInstituteId} from "../utils/userInfo";
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
-import Typography from '@material-ui/core/Typography';
+import {getBranchId} from "../utils/userInfo";
 
 const styles = theme => ({
 
