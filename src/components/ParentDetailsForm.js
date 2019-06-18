@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 
-export default class ParendDetailsForm extends Component {
+export default class ParentDetailsForm extends Component {
 
   gridStyle = {
     marginTop: 20
@@ -89,9 +89,9 @@ export default class ParendDetailsForm extends Component {
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <TextField
               style={this.textFieldStyle}
-              id="bloodGrp"
-              value={values['bloodGrp'] ? values['bloodGrp'] : ''}
-              name="bloodGrp"
+              id="bloodGroup"
+              value={values['bloodGroup'] ? values['bloodGroup'] : ''}
+              name="bloodGroup"
               label="Blood Group"
               onChange={(e) => this.handleChange(e)}
             />

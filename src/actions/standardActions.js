@@ -1,4 +1,4 @@
-import {standardActionTypes, CALL_API, studentAdmissionActionTypes} from './actionTypes';
+import {standardActionTypes, CALL_API, studentActionTypes} from './actionTypes';
 
 export function getAllStandards(instituteId) {
   return {

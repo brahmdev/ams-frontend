@@ -117,7 +117,7 @@ class Header extends React.Component {
     super(props);
 
     this.state = {
-      open: true,
+      open: false,
       accountMenuOpen: false,
       anchorEl: null
     };
@@ -237,6 +237,7 @@ class Header extends React.Component {
               paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
             }}
             open={this.state.open}
+            width='100%'
           >
             <div className={classes.toolbarIcon}>
               <div className={classes.logo}>YOUR LOGO GOES HERE</div>

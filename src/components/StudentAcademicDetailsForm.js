@@ -78,7 +78,7 @@ export default class StudentAcademicDetailsForm extends Component {
     return (
       <React.Fragment>
         <Typography variant="h6" gutterBottom>
-          Parent Details
+          Academic Details
         </Typography>
         <Grid container spacing={8}>
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>

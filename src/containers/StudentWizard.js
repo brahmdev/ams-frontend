@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import {withStyles} from "@material-ui/core";
 import connect from "react-redux/es/connect/connect";
 import StudentPersonalDetailsForm from "../components/StudentPersonalDetailsForm";
-import ParendDetailsForm from "../components/ParendDetailsForm";
+import ParentDetailsForm from "../components/ParentDetailsForm";
 import StudentAcademicDetailsForm from "../components/StudentAcademicDetailsForm";
 import {getInstituteId} from "../utils/userInfo";
 import { getAllStandardLookUpForStudent, getAllBatchOfStandardLookUp, saveOrUpdateUser } from "../actions/studentActions";
@@ -94,8 +94,8 @@ class StudentWizard extends Component {
   };
 
   componentDidMount() {
-    const instituteId = getInstituteId();
-    this.props.getAllStandardLookUpForStudent(instituteId);
+    const branchId = getBranchId();
+    this.props.getAllStandardLookUpForStudent(branchId);
   }
 
   handleReset = () => {
@@ -122,8 +122,8 @@ class StudentWizard extends Component {
     this.isStudentAcademicDetailsFormInValid = false;
   };
 
-  makeUserName = (length) => {
-    var name = this.studentPersonalDetailsFieldsValue.firstname + this.studentPersonalDetailsFieldsValue.lastname;
+  makeUserName = (firstname, lastname, length) => {
+    var name = firstname + lastname;
     var username = '';
     var characters = name;
     var charactersLength = characters.length;
@@ -149,7 +149,7 @@ class StudentWizard extends Component {
       return;
     } else if (this.studentPersonalDetailsFieldsValue.firstname && this.studentPersonalDetailsFieldsValue.lastname && this.studentPersonalDetailsFieldsValue.firstname.trim().length > 0 && this.studentPersonalDetailsFieldsValue.lastname.trim().length > 0) {
       const studentPersonalDetailsFieldsValue = this.studentPersonalDetailsFieldsValue;
-      studentPersonalDetailsFieldsValue.username = this.makeUserName(6);
+      studentPersonalDetailsFieldsValue.username = this.makeUserName(this.studentPersonalDetailsFieldsValue.firstname, this.studentPersonalDetailsFieldsValue.lastname, 6);
       studentPersonalDetailsErrors.username = false;
       this.setState({studentPersonalDetailsErrors});
     }
@@ -167,7 +167,7 @@ class StudentWizard extends Component {
       return;
     } else if (this.parentDetailsFieldsValue.firstname && this.parentDetailsFieldsValue.lastname && this.parentDetailsFieldsValue.firstname.trim().length > 0 && this.parentDetailsFieldsValue.lastname.trim().length > 0) {
       const parentDetailsRequiredFields = this.parentDetailsFieldsValue;
-      parentDetailsRequiredFields.username = this.makeUserName(6);
+      parentDetailsRequiredFields.username = this.makeUserName(this.parentDetailsFieldsValue.firstname, this.parentDetailsFieldsValue.lastname, 6);
       parentDetailsErrors.username = false;
       this.setState({parentDetailsErrors});
     }
@@ -199,7 +199,7 @@ class StudentWizard extends Component {
                                            errors={this.state.studentPersonalDetailsErrors}
                                            values={this.studentPersonalDetailsFieldsValue}/>;
       case 1:
-        return <ParendDetailsForm onChange={this.onChangeParentDetailsFormField}
+        return <ParentDetailsForm onChange={this.onChangeParentDetailsFormField}
                                   errors={this.state.parentDetailsErrors}
                                   values={this.parentDetailsFieldsValue}/>;
       case 2:

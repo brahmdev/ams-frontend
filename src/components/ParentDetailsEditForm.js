@@ -1,17 +1,15 @@
 import React, {Component} from 'react';
-import Typography from "@material-ui/core/Typography/Typography";
-import Grid from "@material-ui/core/Grid/Grid";
-import TextField from "@material-ui/core/TextField/TextField";
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Select from "@material-ui/core/Select/Select";
-import Input from "@material-ui/core/Input/Input";
-import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import DateFnsUtils from '@date-io/date-fns';
-import {MuiPickersUtilsProvider, TimePicker, DatePicker} from 'material-ui-pickers';
-import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import Button from "@material-ui/core/Button/Button";
 
-class StudentPersonalDetailsEditForm extends Component {
+export default class ParentDetailsEditForm extends Component {
 
   mainGrid = {
     marginLeft: '2%'
@@ -28,6 +26,7 @@ class StudentPersonalDetailsEditForm extends Component {
   };
   save = {
     position: 'absolute',
+    // bottom: '25px',
     right: '25px'
   };
 
@@ -36,20 +35,15 @@ class StudentPersonalDetailsEditForm extends Component {
     this.props.onChange({name, value});
   };
 
-  handleDateChange = (date) => {
-    const name = 'dob';
-    this.props.onChange({name, value: date});
-  };
-
   render() {
-    const {values, errors, savePersonalDetails} = this.props;
+    const {errors, values, saveParentDetails} = this.props;
     return (
       <Grid item xs={12}>
         <Grid container>
           <Grid item>
             <div style={this.mainGrid}>
               <Typography variant="h6" gutterBottom>
-                Student Personal Details
+                Parent Details
               </Typography>
               <Grid container spacing={8}>
                 <Grid style={this.gridStyle} container item xs={4} spacing={8}>
@@ -82,6 +76,7 @@ class StudentPersonalDetailsEditForm extends Component {
                 <Grid style={this.gridStyle} container item xs={4} spacing={8}>
                   <TextField
                     disabled={true}
+                    required
                     style={this.textFieldStyle}
                     id="username"
                     name="username"
@@ -118,15 +113,6 @@ class StudentPersonalDetailsEditForm extends Component {
                       <MenuItem value={'Others'}>Others</MenuItem>
                     </Select>
                   </FormControl>
-                </Grid>
-                <Grid style={this.gridStyle} container item xs={4} spacing={8}>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DatePicker
-                      label="Date of Birth"
-                      value={values['dob'] ? values['dob'] : ''}
-                      onChange={(date) => this.handleDateChange(date)}
-                    />
-                  </MuiPickersUtilsProvider>
                 </Grid>
                 <Grid style={this.gridStyle} container item xs={4} spacing={8}>
                   <TextField
@@ -167,81 +153,49 @@ class StudentPersonalDetailsEditForm extends Component {
                 </Grid>
                 <Grid style={this.gridStyle} container item xs={4} spacing={8}>
                   <TextField
-                    style={this.textFieldStyle}
                     required
-                    id="city"
-                    value={values['city'] ? values['city'] : ''}
-                    name="city"
-                    label="City"
-                    autoComplete="billing address-level2"
-                    onChange={(e) => this.handleChange(e)}
-                    error={errors['city'] ? errors['city'] : false}
-                  />
-                </Grid>
-                <Grid style={this.gridStyle} container item xs={4} spacing={8}>
-                  <TextField
-                    disabled={true}
-                    id="state"
-                    value={'Maharashtra'}
-                    readOnly
                     style={this.textFieldStyle}
-                    name="state"
-                    label="State/Province/Region"
+                    id="relation"
+                    value={values['relation'] ? values['relation'] : ''}
+                    name="relation"
+                    label="Relation"
                     onChange={(e) => this.handleChange(e)}
-                    error={errors['state'] ? errors['state'] : false}
+                    error={errors['relation'] ? errors['relation'] : false}
                   />
                 </Grid>
                 <Grid style={this.gridStyle} container item xs={4} spacing={8}>
                   <TextField
                     required
                     style={this.textFieldStyle}
-                    id="zip"
-                    value={values['zip'] ? values['zip'] : ''}
-                    name="zip"
-                    label="Zip / Postal code"
-                    autoComplete="billing postal-code"
+                    id="occupation"
+                    value={values['occupation'] ? values['occupation'] : ''}
+                    name="occupation"
+                    label="Occupation"
                     onChange={(e) => this.handleChange(e)}
-                    error={errors['zip'] ? errors['zip'] : false}
+                    error={errors['occupation'] ? errors['occupation'] : false}
                   />
                 </Grid>
                 <Grid style={this.gridStyle} container item xs={4} spacing={8}>
                   <TextField
-                    required
-                    disabled={true}
+                    type="number"
                     style={this.textFieldStyle}
-                    id="country"
-                    value={'India'}
-                    name="country"
-                    readOnly
-                    label="Country"
-                    autoComplete="billing country"
+                    id="income"
+                    value={values['income'] ? values['income'] : ''}
+                    name="income"
+                    label="Income"
                     onChange={(e) => this.handleChange(e)}
-                    error={errors['country'] ? errors['country'] : false}
+                    error={errors['income'] ? errors['income'] : false}
                   />
                 </Grid>
                 <Grid style={this.gridStyle} container item xs={4} spacing={8}>
                   <TextField
-                    id="language"
-                    value={values['language'] ? values['language'] : ''}
                     style={this.textFieldStyle}
-                    name="language"
-                    label="Language"
+                    id="education"
+                    value={values['education'] ? values['education'] : ''}
+                    name="education"
+                    label="Education"
                     onChange={(e) => this.handleChange(e)}
-                  />
-                </Grid>
-                <Grid style={this.gridStyle} container item xs={12} spacing={8}>
-                  <TextField
-                    required
-                    id="address"
-                    value={values['address'] ? values['address'] : ''}
-                    name="address"
-                    label="Address"
-                    fullWidth
-                    multiline
-                    rows={3}
-                    autoComplete="billing address-line2"
-                    onChange={(e) => this.handleChange(e)}
-                    error={errors['address'] ? errors['address'] : false}
+                    error={errors['education'] ? errors['education'] : false}
                   />
                 </Grid>
                 <Grid style={this.gridStyle} container item xs={12} spacing={8}>
@@ -250,7 +204,7 @@ class StudentPersonalDetailsEditForm extends Component {
                   </Typography>
                 </Grid>
                 <Grid style={this.gridStyle} container item xs={12} spacing={8}>
-                  <Button variant="contained" style={this.save} color="primary" onClick={() => savePersonalDetails()}>
+                  <Button variant="contained" style={this.save} color="primary" onClick={() => saveParentDetails()}>
                     Save
                   </Button>
                 </Grid>
@@ -262,5 +216,3 @@ class StudentPersonalDetailsEditForm extends Component {
     );
   }
 }
-
-export default StudentPersonalDetailsEditForm;

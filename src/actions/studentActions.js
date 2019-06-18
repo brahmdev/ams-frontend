@@ -1,8 +1,8 @@
-import {subjectActionTypes, studentAdmissionActionTypes, CALL_API} from './actionTypes';
+import {subjectActionTypes, studentActionTypes, CALL_API} from './actionTypes';
 
 export function getAllStudents(branchId) {
   return {
-    type: studentAdmissionActionTypes.API_GET_ALL_STUDENTS,
+    type: studentActionTypes.API_GET_ALL_STUDENTS,
     apiType: CALL_API,
     callAPI: {
       apiPathWithParam: `/admin/users/${branchId}/ROLE_STUDENT`,
@@ -13,9 +13,23 @@ export function getAllStudents(branchId) {
   };
 }
 
+
+export function getParentDetails(studentUserName) {
+  return {
+    type: studentActionTypes.API_GET_PARENT,
+    apiType: CALL_API,
+    callAPI: {
+      apiPathWithParam: `/admin/users/parent/${studentUserName}`,
+      options: {
+        method: 'GET'
+      }
+    },
+  };
+}
+
 export function getAllStandardLookUpForStudent(instituteId) {
   return {
-    type: studentAdmissionActionTypes.API_GET_ALL_STANDARD_LOOKUP_FOR_STUDENT_ADMISSION,
+    type: studentActionTypes.API_GET_ALL_STANDARD_LOOKUP_FOR_STUDENT_ADMISSION,
     apiType: CALL_API,
     callAPI: {
       apiPathWithParam: `/admin/standards/${instituteId}/lookup`,
@@ -28,7 +42,7 @@ export function getAllStandardLookUpForStudent(instituteId) {
 
 export function getAllBatchOfStandardLookUp(standardId) {
   return {
-    type: studentAdmissionActionTypes.API_GET_BATCH_FOR_STUDENT_ADMISSION,
+    type: studentActionTypes.API_GET_BATCH_FOR_STUDENT_ADMISSION,
     apiType: CALL_API,
     callAPI: {
       apiPathWithParam: `/admin/batches/standard/${standardId}/lookup`,

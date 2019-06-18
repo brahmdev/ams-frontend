@@ -97,9 +97,9 @@ export default class StudentPersonalDetailsForm extends Component {
           <Grid style={this.gridStyle} container item xs={6} spacing={8}>
             <TextField
               style={this.textFieldStyle}
-              id="bloodGrp"
-              value={values['bloodGrp'] ? values['bloodGrp'] : ''}
-              name="bloodGrp"
+              id="bloodGroup"
+              value={values['bloodGroup'] ? values['bloodGroup'] : ''}
+              name="bloodGroup"
               label="Blood Group"
               onChange={(e) => this.handleChange(e)}
             />
