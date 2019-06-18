@@ -293,6 +293,8 @@ class StudentWizard extends Component {
       "id": branchId
     };
     let studentUser = this.studentPersonalDetailsFieldsValue;
+    let parentUser = this.parentDetailsFieldsValue;
+
     studentUser.branch = branch;
     if (this.studentAcademicDetailsFieldsValue.hasPaidFees === true) {
       this.studentAcademicDetailsFieldsValue.hasPaidFees = "Y";
@@ -305,6 +307,7 @@ class StudentWizard extends Component {
       "id": batchId
     };
     this.studentAcademicDetailsFieldsValue.batch = batch;
+    this.studentAcademicDetailsFieldsValue.parentsUsername = parentUser.username;
     studentUser.studentDetailses = [this.studentAcademicDetailsFieldsValue];
     const authoritiesesStudent = {
       username: studentUser.username,
@@ -315,7 +318,6 @@ class StudentWizard extends Component {
 
     this.props.createUser(studentUser);
 
-    let parentUser = this.parentDetailsFieldsValue;
     parentUser.branch = branch;
     parentUser.address = studentUser.address;
     parentUser.city = studentUser.city;

@@ -253,6 +253,12 @@ class StudentDetails extends React.Component {
     if (parentDetails !== '') {
       parentDetails = this.createParentDataForEdit(parentDetails);
     }
+    if (Object.keys(this.studentAcademicDetailsValue).length === 0) {
+      this.studentAcademicDetailsValue = Object.assign({}, userDetails.studentDetailses[0]);
+      this.studentAcademicDetailsValue.standard = userDetails.studentDetailses[0].batch.standard ? userDetails.studentDetailses[0].batch.standard.id : userDetails.studentDetailses[0].batch;
+      this.studentAcademicDetailsValue.batch = userDetails.studentDetailses[0].batch.id;
+      this.studentAcademicDetailsValue.fees = userDetails.studentDetailses[0].batch.standard.fees;
+    }
 
     return (
       <React.Fragment>
