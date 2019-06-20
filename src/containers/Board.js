@@ -5,6 +5,7 @@ import { getAllBoards, createBoard, deleteBoard, updateBoard } from "../actions/
 import { getAllBranchesLookUp } from '../actions/branchActions';
 import connect from "react-redux/es/connect/connect";
 import { getBranchId, getInstituteId } from "../utils/userInfo";
+import classNames from 'classnames';
 
 const styles = theme => ({
 
@@ -52,7 +53,7 @@ class Board extends Component {
     const branchId = getBranchId();
 
     return (
-      <div className={classes.content}>
+      <div className={classNames(classes.content, 'ams-table')}>
         <MaterialTable
           title="Board"
           columns={this.state.columns}

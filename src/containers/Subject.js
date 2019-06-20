@@ -5,6 +5,7 @@ import { getAllStandardLookUp } from "../actions/standardActions";
 import { getAllSubjects, createSubject, deleteSubject, updateSubject } from "../actions/subjectActions";
 import connect from "react-redux/es/connect/connect";
 import {getBranchId, getInstituteId} from "../utils/userInfo";
+import classNames from 'classnames';
 
 const styles = theme => ({
 
@@ -49,7 +50,7 @@ class Subject extends Component {
   render() {
     const {classes, subject} = this.props;
     return (
-      <div className={classes.content}>
+      <div className={classNames(classes.content, 'ams-table')}>
         <MaterialTable
           title="Subject"
           columns={this.state.columns}

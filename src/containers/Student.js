@@ -6,6 +6,7 @@ import {withStyles} from "@material-ui/core";
 import {getAllStudents} from "../actions/studentActions";
 import connect from "react-redux/es/connect/connect";
 import {getBranchId} from "../utils/userInfo";
+import classNames from 'classnames';
 
 const styles = theme => ({
 
@@ -60,7 +61,7 @@ class Student extends Component {
     const {value} = this.state;
 
     return (
-      <div className={classes.content}>
+      <div className={classNames(classes.content, 'ams-table')}>
         <MaterialTable
           title="Students"
           columns={this.state.columns}

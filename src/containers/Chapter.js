@@ -5,6 +5,7 @@ import { getAllChapters, createChapter, updateChapter, deleteChapter } from "../
 import { getAllSubjectLookUp } from "../actions/subjectActions";
 import connect from "react-redux/es/connect/connect";
 import {getBranchId, getInstituteId} from "../utils/userInfo";
+import classNames from 'classnames';
 
 const styles = theme => ({
 
@@ -50,7 +51,7 @@ class Standard extends Component {
   render() {
     const {classes, chapter} = this.props;
     return (
-      <div className={classes.content}>
+      <div className={classNames(classes.content, 'ams-table')}>
         <MaterialTable
           title="Chapter"
           columns={this.state.columns}

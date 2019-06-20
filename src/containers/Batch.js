@@ -5,6 +5,7 @@ import { getAllStandardLookUp } from "../actions/standardActions";
 import { getAllBatches, createBatch, updateBatch, deleteBatch } from "../actions/batchActions";
 import connect from "react-redux/es/connect/connect";
 import {getBranchId, getInstituteId} from "../utils/userInfo";
+import classNames from 'classnames';
 
 const styles = theme => ({
 
@@ -53,7 +54,7 @@ class Batch extends Component {
   render() {
     const {classes, batch} = this.props;
     return (
-      <div className={classes.content}>
+      <div className={classNames(classes.content, 'ams-table')}>
         <MaterialTable
           title="Batch"
           columns={this.state.columns}

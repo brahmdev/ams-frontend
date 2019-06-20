@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import MaterialTable from 'material-table';
 import {withStyles} from "@material-ui/core";
-import { getAllBranches, createBranch, deleteBranch, updateBranch } from "../actions/branchActions";
+import {getAllBranches, createBranch, deleteBranch, updateBranch} from "../actions/branchActions";
 import connect from "react-redux/es/connect/connect";
-import { getInstituteId } from "../utils/userInfo";
+import {getInstituteId} from "../utils/userInfo";
+import '../styles/table.scss';
+import classNames from 'classnames';
 
 const styles = theme => ({
 
@@ -40,7 +42,7 @@ class Branch extends Component {
     const instituteId = getInstituteId();
 
     return (
-      <div className={classes.content}>
+      <div className={classNames(classes.content, 'ams-table')}>
         <MaterialTable
           title="Branch"
           columns={this.state.columns}
@@ -60,7 +62,7 @@ class Branch extends Component {
                 setTimeout(() => {
                   {
                     const institute = {
-                      "id" : instituteId
+                      "id": instituteId
                     };
                     newData.institute = institute;
                     this.props.createBranch(newData);
@@ -73,7 +75,7 @@ class Branch extends Component {
                 setTimeout(() => {
                   {
                     const institute = {
-                      "id" : instituteId
+                      "id": instituteId
                     };
                     newData.institute = institute;
                     this.props.updateBranch(newData)
@@ -84,7 +86,7 @@ class Branch extends Component {
             onRowDelete: oldData =>
               new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    this.props.deleteBranch(oldData.id);
+                  this.props.deleteBranch(oldData.id);
                   resolve()
                 }, 1000)
               }),

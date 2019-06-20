@@ -5,6 +5,7 @@ import { getAllStandards, createStandard, deleteStandard, updateStandard } from 
 import { getAllBoardsLookUp } from "../actions/boardActions";
 import connect from "react-redux/es/connect/connect";
 import {getBranchId, getInstituteId} from "../utils/userInfo";
+import classNames from 'classnames';
 
 const styles = theme => ({
 
@@ -54,7 +55,7 @@ class Standard extends Component {
     const {classes, standard} = this.props;
 
     return (
-      <div className={classes.content}>
+      <div className={classNames(classes.content, 'ams-table')}>
         <MaterialTable
           title="Standard"
           columns={this.state.columns}
