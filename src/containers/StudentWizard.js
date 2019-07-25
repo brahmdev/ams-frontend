@@ -140,19 +140,20 @@ class StudentWizard extends Component {
   onChangeStudentPersonalDetailsFormField = (data) => {
     const {name, value} = data;
     const {studentPersonalDetailsErrors} = this.state;
+    const { firstname, lastname } = this.studentPersonalDetailsFieldsValue;
     this.studentPersonalDetailsFieldsValue[name] = value;
     if ((value && value.length > 0) || (name === 'dob' && this.isValidDate(value))) {
       studentPersonalDetailsErrors[name] = false;
       this.setState({studentPersonalDetailsErrors, isStudentPersonalDetailsFormValid: false});
     }
-    if (this.studentPersonalDetailsFieldsValue.username && this.studentPersonalDetailsFieldsValue.username.trim().length > 0) {
-      return;
-    } else if (this.studentPersonalDetailsFieldsValue.firstname && this.studentPersonalDetailsFieldsValue.lastname && this.studentPersonalDetailsFieldsValue.firstname.trim().length > 0 && this.studentPersonalDetailsFieldsValue.lastname.trim().length > 0) {
+    if ((name === "firstname" || name ===  "lastname") && value.trim().length === 0) {
+      this.studentPersonalDetailsFieldsValue.username = '';
+    } else if (firstname && lastname && firstname.trim().length > 0 && lastname.trim().length > 0) {
       const studentPersonalDetailsFieldsValue = this.studentPersonalDetailsFieldsValue;
       studentPersonalDetailsFieldsValue.username = this.makeUserName(this.studentPersonalDetailsFieldsValue.firstname, this.studentPersonalDetailsFieldsValue.lastname, 6);
       studentPersonalDetailsErrors.username = false;
-      this.setState({studentPersonalDetailsErrors});
     }
+    this.setState({studentPersonalDetailsErrors});
   };
 
   onChangeParentDetailsFormField = (data) => {
@@ -164,13 +165,14 @@ class StudentWizard extends Component {
       this.setState({parentDetailsErrors, isParentDetailsFormInValid: false});
     }
     if (this.parentDetailsFieldsValue.username && this.parentDetailsFieldsValue.username.trim().length > 0) {
+      this.setState({parentDetailsErrors});
       return;
     } else if (this.parentDetailsFieldsValue.firstname && this.parentDetailsFieldsValue.lastname && this.parentDetailsFieldsValue.firstname.trim().length > 0 && this.parentDetailsFieldsValue.lastname.trim().length > 0) {
       const parentDetailsRequiredFields = this.parentDetailsFieldsValue;
       parentDetailsRequiredFields.username = this.makeUserName(this.parentDetailsFieldsValue.firstname, this.parentDetailsFieldsValue.lastname, 6);
       parentDetailsErrors.username = false;
-      this.setState({parentDetailsErrors});
     }
+    this.setState({parentDetailsErrors});
   };
 
   handleStandardChange(standardId) {
@@ -186,6 +188,7 @@ class StudentWizard extends Component {
       studentAcademicDetailsErrors[name] = false;
       this.setState({studentAcademicDetailsErrors, isParentDetailsFormInValid: false});
     }
+    this.setState({studentAcademicDetailsErrors});
   };
 
   getSteps = () => {
@@ -334,7 +337,7 @@ class StudentWizard extends Component {
     parentUser.parentDetailses = [parentDetails];
 
     const authoritiesesParent = {
-      username: studentUser.username,
+      username: parentUser.username,
       authority: 'ROLE_PARENT'
     };
     parentUser.authoritieses = [authoritiesesParent];

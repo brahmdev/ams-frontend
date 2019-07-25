@@ -23,6 +23,10 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case userActionTypes.API_USER_LOGIN + apiExecutionState.STARTED:
+      return {
+        ...state
+      };
     case userActionTypes.API_USER_LOGIN + apiExecutionState.FINISHED:
       const user = JSON.parse(action.response);
       console.log('user: ', user);
